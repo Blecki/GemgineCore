@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{05E1D522-B78C-47C9-8C12-ABB73C734397}</ProjectGuid>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Core</RootNamespace>
+    <AssemblyName>Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <XnaPlatform>Windows</XnaPlatform>
+    <XnaProfile>Reach</XnaProfile>
+    <XnaCrossPlatformGroupID>658b5e0a-d96a-410b-a9f9-bc669f0bff94</XnaCrossPlatformGroupID>
+    <XnaOutputType>Library</XnaOutputType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>false</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>true</XnaCompressContent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net">
+      <Private>False</Private>
+    </Reference>
+    <ProjectReference Include="..\ContentManifestExtensions\ContentManifestExtensions.csproj">
+      <Project>{F4CDBC64-A84A-41CD-A941-418B67578AF7}</Project>
+      <Name>ContentManifestExtensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionHelper.cs" />
+    <Compile Include="AddMany.cs" />
+    <Compile Include="CommandLine.cs" />
+    <Compile Include="Common\BufferedList.cs" />
+    <Compile Include="Common\ConcurrentTaskQueue.cs" />
+    <Compile Include="Common\Coordinate.cs" />
+    <Compile Include="Common\DelayList.cs" />
+    <Compile Include="Common\Directions.cs" />
+    <Compile Include="Common\Grid.cs" />
+    <Compile Include="CompiledModel.cs" />
+    <Compile Include="Component.cs" />
+    <Compile Include="ComponentMapping.cs" />
+    <Compile Include="ConsoleBuffer.cs" />
+    <Compile Include="Console\BufferedList.cs" />
+    <Compile Include="Console\DynamicConsoleBuffer.cs" />
+    <Compile Include="Console\TextDisplay.cs" />
+    <Compile Include="Console\Vertex.cs" />
+    <Compile Include="Console\VirtualConsole.cs" />
+    <Compile Include="ConsoleWindow.cs" />
+    <Compile Include="EmptyGame.cs" />
+    <Compile Include="Epiphany\Box2D\Collision\BroadPhase.cs" />
+    <Compile Include="Epiphany\Box2D\Collision\Collision.cs" />
+    <Compile Include="Epiphany\Box2D\Collision\Distance.cs" />
+    <Compile Include="Epiphany\Box2D\Collision\DynamicTree.cs" />
+    <Compile Include="Epiphany\Box2D\Collision\Shapes\CircleShape.cs" />
+    <Compile Include="Epiphany\Box2D\Collision\Shapes\EdgeShape.cs" />
+    <Compile Include="Epiphany\Box2D\Collision\Shapes\LoopShape.cs" />
+    <Compile Include="Epiphany\Box2D\Collision\Shapes\PolygonShape.cs" />
+    <Compile Include="Epiphany\Box2D\Collision\Shapes\Shape.cs" />
+    <Compile Include="Epiphany\Box2D\Collision\TimeOfImpact.cs" />
+    <Compile Include="Epiphany\Box2D\Common\FixedArray.cs" />
+    <Compile Include="Epiphany\Box2D\Common\Math.cs" />
+    <Compile Include="Epiphany\Box2D\Common\Settings.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Body.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\ContactManager.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Contacts\Contact.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Contacts\ContactSolver.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Contacts\TOISolver.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Fixture.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Island.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Joints\DistanceJoint.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Joints\FrictionJoint.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Joints\GearJoint.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Joints\Joint.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Joints\LineJoint.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Joints\MaxDistanceJoint.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Joints\MouseJoint.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Joints\PrismaticJoint.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Joints\PullyJoint.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Joints\RevoluteJoint.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\Joints\WeldJoint.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\TimeStep.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\World.cs" />
+    <Compile Include="Epiphany\Box2D\Dynamics\WorldCallbacks.cs" />
+    <Compile Include="Epiphany\Circle.cs" />
+    <Compile Include="Epiphany\CreatePolygonFrom2D.cs" />
+    <Compile Include="Epiphany\Edge.cs" />
+    <Compile Include="Epiphany\IShape.cs" />
+    <Compile Include="Epiphany\Physics\ActorPhysics.cs" />
+    <Compile Include="Epiphany\Physics\ContactListner.cs" />
+    <Compile Include="Epiphany\Physics\Physics.cs" />
+    <Compile Include="Epiphany\Physics\PhysicsModule.cs" />
+    <Compile Include="Epiphany\Physics\PolygonPhysics.cs" />
+    <Compile Include="Epiphany\Polygon.cs" />
+    <Compile Include="Epiphany\PolygonDecomposition.cs" />
+    <Compile Include="Euler.cs" />
+    <Compile Include="Geo\Csg\Bevel.cs" />
+    <Compile Include="Geo\Csg\ConvertToBrush.cs" />
+    <Compile Include="Geo\Csg\CreateCube.cs" />
+    <Compile Include="Geo\Csg\CreatePrism.cs" />
+    <Compile Include="Geo\Csg\CreatePyramid.cs" />
+    <Compile Include="Geo\Csg\PlanesFromMesh.cs" />
+    <Compile Include="Geo\Csg\Transform.cs" />
+    <Compile Include="Geo\EdgeMesh\RayIntersection.cs" />
+    <Compile Include="Geo\Gen\AlignToSpline.cs" />
+    <Compile Include="Geo\Gen\Basics.cs" />
+    <Compile Include="Geo\EdgeMesh\SimplifyEdgeMesh.cs" />
+    <Compile Include="Geo\EdgeMesh\EdgeMesh.cs" />
+    <Compile Include="Geo\Gen\WeldCopy.cs" />
+    <Compile Include="Geo\Gen\CreateTexturedFacetedCube.cs" />
+    <Compile Include="Geo\Gen\ProjectTextureCube.cs" />
+    <Compile Include="Geo\Gen\CreateCube.cs" />
+    <Compile Include="Geo\Gen\CreateLine.cs" />
+    <Compile Include="Geo\Gen\CreatePrism.cs" />
+    <Compile Include="Geo\Gen\CreateUnitPolygon.cs" />
+    <Compile Include="Geo\Gen\ExtrudeShape.cs" />
+    <Compile Include="Geo\Gen\Facet.cs" />
+    <Compile Include="Geo\Gen\FitToBox.cs" />
+    <Compile Include="Geo\Gen\Icosahedron.cs" />
+    <Compile Include="Geo\Gen\MorphToSpline.cs" />
+    <Compile Include="Geo\Gen\Patch.cs" />
+    <Compile Include="Geo\Gen\ProjectTexture.cs" />
+    <Compile Include="Geo\Gen\Subdivide.cs" />
+    <Compile Include="Geo\PlanarProjection.cs" />
+    <Compile Include="Geo\TextureProjection.cs" />
+    <Compile Include="Gui\BitmapFont.cs" />
+    <Compile Include="Gui\BorderLayout.cs" />
+    <Compile Include="Gui\GuiDriver.cs" />
+    <Compile Include="Gui\GuiRenderable.cs" />
+    <Compile Include="Gui\FlowLayout.cs" />
+    <Compile Include="Gui\GridLayout.cs" />
+    <Compile Include="Gui\GuiModule.cs" />
+    <Compile Include="Gui\GuiSceneNode.cs" />
+    <Compile Include="Gui\Layout.cs" />
+    <Compile Include="Gui\UIItem.cs" />
+    <Compile Include="IGame.cs" />
+    <Compile Include="IModule.cs" />
+    <Compile Include="Input.cs" />
+    <Compile Include="InputActionHandler.cs" />
+    <Compile Include="LocalGame.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="Math\AABB.cs" />
+    <Compile Include="Math\Angle.cs" />
+    <Compile Include="Math\Bezier.cs" />
+    <Compile Include="Math\Circle.cs" />
+    <Compile Include="Math\Intersection.cs" />
+    <Compile Include="Math\IntersectionPointInPoly.cs" />
+    <Compile Include="Math\OBB.cs" />
+    <Compile Include="Math\Spline.cs" />
+    <Compile Include="Math\Utility.cs" />
+    <Compile Include="Math\Vector.cs" />
+    <Compile Include="Mesh.cs" />
+    <Compile Include="Network\ClientSession.cs" />
+    <Compile Include="Network\ControlMessage.cs" />
+    <Compile Include="Network\CriticalDatagram.cs" />
+    <Compile Include="Network\ISyncable.cs" />
+    <Compile Include="Network\ReadOnlyDatagram.cs" />
+    <Compile Include="Network\RemotePeer.cs" />
+    <Compile Include="Network\ScriptMessage.cs" />
+    <Compile Include="Network\ServerSession.cs" />
+    <Compile Include="Network\WriteOnlyDatagram.cs" />
+    <Compile Include="ObjectClickHandler.cs" />
+    <Compile Include="ObjectList.cs" />
+    <Compile Include="OctTreeModule\OctNode.cs" />
+    <Compile Include="OctTreeModule\OctTree.cs" />
+    <Compile Include="Pathfinding.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertySet.cs" />
+    <Compile Include="RealtimeCsg\AABB.cs" />
+    <Compile Include="RealtimeCsg\BrushGenerator.cs" />
+    <Compile Include="RealtimeCsg\Constants.cs" />
+    <Compile Include="RealtimeCsg\CSGCategorization.cs" />
+    <Compile Include="RealtimeCsg\CSGMesh.cs" />
+    <Compile Include="RealtimeCsg\CSGNode.cs" />
+    <Compile Include="RealtimeCsg\CSGNodeType.cs" />
+    <Compile Include="RealtimeCsg\CSGTree.cs" />
+    <Compile Include="RealtimeCsg\CSGUtility.cs" />
+    <Compile Include="RealtimeCsg\HalfEdge.cs" />
+    <Compile Include="RealtimeCsg\Plane.cs" />
+    <Compile Include="RealtimeCsg\PlaneSideResult.cs" />
+    <Compile Include="RealtimeCsg\Polygon.cs" />
+    <Compile Include="RealtimeCsg\PolygonCategory.cs" />
+    <Compile Include="RealtimeCsg\PolygonSplitResult.cs" />
+    <Compile Include="RealtimeCsg\Vector3.cs" />
+    <Compile Include="Render\BranchNode.cs" />
+    <Compile Include="Render\Cameras\Free.cs" />
+    <Compile Include="Render\Cameras\Orbit.cs" />
+    <Compile Include="Render\Cameras\Orthographic.cs" />
+    <Compile Include="Render\Cameras\ZPlaneOrbit.cs" />
+    <Compile Include="Render\SpriteNode.cs" />
+    <Compile Include="Render\CsgMeshLeafNode.cs" />
+    <Compile Include="Render\ICamera.cs" />
+    <Compile Include="Render\ImmediateMode2d.cs" />
+    <Compile Include="Render\ImmediateModeDebug.cs" />
+    <Compile Include="Render\IRenderable.cs" />
+    <Compile Include="Render\ISceneNode.cs" />
+    <Compile Include="Render\LeafNode.cs" />
+    <Compile Include="Render\MatrixStack.cs" />
+    <Compile Include="Render\ObjectSet.cs" />
+    <Compile Include="Render\RenderContext.cs" />
+    <Compile Include="Render\RenderModule.cs" />
+    <Compile Include="Render\SceneGraph.cs" />
+    <Compile Include="Simulation.cs" />
+    <Compile Include="StateMachine\Common.cs" />
+    <Compile Include="StateMachine\Machine.cs" />
+    <Compile Include="StateMachine\State.cs" />
+    <Compile Include="StateMachine\Transition.cs" />
+    <Compile Include="TextInputHook.cs" />
+    <Compile Include="TextureAlignment.cs" />
+    <Compile Include="Upsert.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ContentManifestExtensions\ContentManifestExtensions.csproj">
+      <Project>{F4CDBC64-A84A-41CD-A941-418B67578AF7}</Project>
+      <Name>ContentManifestExtensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
+  <!--
+      To modify your build process, add your task inside one of the targets below and uncomment it. 
+      Other similar extension points exist, see Microsoft.Common.targets.
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+    -->
+</Project>
