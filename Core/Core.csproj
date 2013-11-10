@@ -205,10 +205,10 @@
     <Compile Include="Geo\RealtimeCsg\PolygonSplitResult.cs" />
     <Compile Include="Geo\RealtimeCsg\Vector3.cs" />
     <Compile Include="Render\SceneGraph\BranchNode.cs" />
-    <Compile Include="Render\Cameras\Free.cs" />
-    <Compile Include="Render\Cameras\Orbit.cs" />
-    <Compile Include="Render\Cameras\Orthographic.cs" />
-    <Compile Include="Render\Cameras\ZPlaneOrbit.cs" />
+    <Compile Include="Render\Cameras\FreeCamera.cs" />
+    <Compile Include="Render\Cameras\OrbitCamera.cs" />
+    <Compile Include="Render\Cameras\OrthographicCamera.cs" />
+    <Compile Include="Render\Cameras\ZPlaneOrbitCamera.cs" />
     <Compile Include="Render\Renderer.cs" />
     <Compile Include="Render\SceneGraph\SpriteNode.cs" />
     <Compile Include="Render\SceneGraph\CsgMeshNode.cs" />

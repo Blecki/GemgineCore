@@ -14,7 +14,7 @@ namespace Gem.Gui
     public class Renderable : Render.IRenderable
     {
         private GuiDriver module = null;
-        internal Render.Cameras.Orthographic uiCamera = null;
+        internal Render.Cameras.OrthographicCamera uiCamera = null;
         public UIItem uiRoot = null;
         internal RenderTarget2D renderTarget = null;
         private Geo.CompiledModel quadModel = null;
@@ -30,7 +30,7 @@ namespace Gem.Gui
             this.Orientation = Euler;
             if (this.Orientation == null) this.Orientation = new Euler();
 
-            uiCamera = new Render.Cameras.Orthographic(new Viewport(0, 0, width, height));
+            uiCamera = new Render.Cameras.OrthographicCamera(new Viewport(0, 0, width, height));
             uiRoot = new UIItem(new Rectangle(0, 0, width, height));
             uiRoot.settings = new PropertySet();
 
@@ -105,7 +105,7 @@ namespace Gem.Gui
             context.Draw(quadModel);
         }
 
-        public void DrawFlat(Render.RenderContext context, Gem.Render.Cameras.Orthographic Camera)
+        public void DrawFlat(Render.RenderContext context, Gem.Render.Cameras.OrthographicCamera Camera)
         {
             var uiContext = module.GetRenderContext();
             uiContext.Camera = Camera;

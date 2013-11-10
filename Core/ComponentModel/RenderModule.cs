@@ -14,7 +14,7 @@ namespace Gem.ComponentModel
 {
     public class RenderModule : IModule
     {
-        public ICamera Camera = new Orbit(Vector3.Zero, Vector3.UnitX, Vector3.UnitZ, 10);
+        public ICamera Camera = new OrbitCamera(Vector3.Zero, Vector3.UnitX, Vector3.UnitZ, 10);
         BasicEffect drawEffect;
         BasicEffect drawIDEffect;
         AlphaTestEffect drawSpriteEffect;

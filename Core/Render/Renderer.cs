@@ -12,7 +12,7 @@ namespace Gem.Render
 {
     public class Renderer
     {
-        public ICamera Camera = new Cameras.Orbit(Vector3.Zero, Vector3.UnitX, Vector3.UnitZ, 10);
+        public ICamera Camera = new Cameras.OrbitCamera(Vector3.Zero, Vector3.UnitX, Vector3.UnitZ, 10);
         BasicEffect drawEffect;
         BasicEffect drawIDEffect;
         AlphaTestEffect drawSpriteEffect;

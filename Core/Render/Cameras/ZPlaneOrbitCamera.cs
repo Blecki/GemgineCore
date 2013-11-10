@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Gem.Render.Cameras
 {
-    public class ZPlaneOrbit : ICamera
+    public class ZPlaneOrbitCamera : ICamera
     {
         private float max_pitch;
         private float min_pitch;
@@ -29,7 +29,7 @@ namespace Gem.Render.Cameras
         public float FarPlane { get; set; }
         public float Distance = 1.0f;
 
-        public ZPlaneOrbit(float max_pitch, float min_pitch, float z_plane, float distance)
+        public ZPlaneOrbitCamera(float max_pitch, float min_pitch, float z_plane, float distance)
         {
             this.max_pitch = max_pitch;
             this.min_pitch = min_pitch;

@@ -11,8 +11,8 @@ namespace Gem.Render
     {
         public GraphicsDevice GraphicsDevice { get; private set; }
 
-        private Cameras.Orthographic _camera = null;
-        public Cameras.Orthographic Camera { get { return _camera; } set { _camera = value; stateChanges = true; } }
+        private Cameras.OrthographicCamera _camera = null;
+        public Cameras.OrthographicCamera Camera { get { return _camera; } set { _camera = value; stateChanges = true; } }
         public MatrixStack MatrixStack { get; private set; }
         public BasicEffect Effect { get; private set; }
         public Texture2D Black { get; private set; }
@@ -28,7 +28,7 @@ namespace Gem.Render
             this.GraphicsDevice = device;
             //Effect = new AlphaTestEffect(device);
             Effect = new BasicEffect(device);
-            Camera = new Cameras.Orthographic(device.Viewport);
+            Camera = new Cameras.OrthographicCamera(device.Viewport);
             MatrixStack = new MatrixStack();
 
             Black = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);

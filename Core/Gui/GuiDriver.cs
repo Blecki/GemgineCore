@@ -32,7 +32,7 @@ namespace Gem.Gui
                 );
         }
 
-        public void DrawRoot(UIItem root, Render.Cameras.Orthographic camera, RenderTarget2D target)
+        public void DrawRoot(UIItem root, Render.Cameras.OrthographicCamera camera, RenderTarget2D target)
         {
             uiRenderer.Camera = camera;
             uiRenderer.BeginScene(target);

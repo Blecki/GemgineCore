@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Gem.Render.Cameras
 {
-    public class Orthographic : ICamera
+    public class OrthographicCamera : ICamera
     {
         public Vector2 focus;
 		public float zoom = 1.0f;
@@ -14,7 +14,7 @@ namespace Gem.Render.Cameras
         public float rotation = 0.0f;
         public Vector3 GetEyeVector() { return Vector3.UnitZ; }
 
-        public Orthographic(Viewport viewport)
+        public OrthographicCamera(Viewport viewport)
         {
             this.Viewport = viewport;
             this.focus = new Vector2(viewport.Width / 2, viewport.Height / 2);

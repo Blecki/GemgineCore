@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Gem.Render.Cameras
 {
-    public class Free : ICamera
+    public class FreeCamera : ICamera
     {
         public Vector3 Position { get; set; }
         public Vector3 GetPosition() { return Position; }
@@ -19,7 +19,7 @@ namespace Gem.Render.Cameras
         public float FarPlane { get; set; }
         public Vector3 GetEyeVector() { return Forward; }
 
-        public Free(Vector3 Position, Vector3 Forward, Vector3 Up, Viewport viewport)
+        public FreeCamera(Vector3 Position, Vector3 Forward, Vector3 Up, Viewport viewport)
         {
             this.Position = Position;
             this.Forward = Forward;

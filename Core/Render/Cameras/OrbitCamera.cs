@@ -10,7 +10,7 @@ namespace Gem.Render.Cameras
     /// <summary>
     /// This camera orbits the position
     /// </summary>
-    public class Orbit : ICamera
+    public class OrbitCamera : ICamera
     {
         public Vector3 Position { get; set; }
         public Vector3 GetPosition() { return Position - (Forward * OrbitDistance); }
@@ -23,7 +23,7 @@ namespace Gem.Render.Cameras
         public float OrbitDistance { get; set; }
         public Vector3 GetEyeVector() { return Forward; }
 
-        public Orbit(Vector3 Position, Vector3 Forward, Vector3 Up, float OrbitDistance)
+        public OrbitCamera(Vector3 Position, Vector3 Forward, Vector3 Up, float OrbitDistance)
         {
             this.Position = Position;
             this.Forward = Forward;

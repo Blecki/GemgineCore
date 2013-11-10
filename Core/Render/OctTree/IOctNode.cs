@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Gem;
 
-namespace Gem
+namespace Gem.Render.OctTree
 {
     public interface IOctNode
     {
