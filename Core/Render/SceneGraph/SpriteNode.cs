@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Gem.Common;
 using Gem.Geo;
 
-namespace Gem.Render
+namespace Gem.Render.SceneGraph
 {
     public class SpriteNode : ISceneNode
     {

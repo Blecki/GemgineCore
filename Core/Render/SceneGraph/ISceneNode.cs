@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Gem.Render
+namespace Gem.Render.SceneGraph
 {
     public interface ISceneNode
     {

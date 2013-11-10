@@ -6,13 +6,13 @@ using Gem.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Gem.Render
+namespace Gem.Render.SceneGraph
 {
-    public class SceneGraphRoot : Render.IRenderable
+    public class Root : Render.IRenderable
     {
         public ISceneNode rootNode = null;
 
-        public SceneGraphRoot(ISceneNode root)
+        public Root(ISceneNode root)
         {
             rootNode = root;
         }

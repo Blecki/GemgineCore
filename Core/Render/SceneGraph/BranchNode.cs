@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Gem.Render
+namespace Gem.Render.SceneGraph
 {
     public class BranchNode : ISceneNode
     {
@@ -37,7 +37,7 @@ namespace Gem.Render
                 child.Draw(context);
         }
 
-        public void Visit(Action<Render.ISceneNode> callback)
+        public void Visit(Action<ISceneNode> callback)
         {
             callback(this);
             foreach (var child in this)

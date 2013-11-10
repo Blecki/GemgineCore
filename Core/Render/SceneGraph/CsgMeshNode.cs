@@ -5,15 +5,15 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Gem.Render
+namespace Gem.Render.SceneGraph
 {
-    public class CsgMeshLeafNode : ISceneNode
+    public class CsgMeshNode : ISceneNode
     {
         public Common.Euler Orientation = null;
 
         public RealtimeCSG.CSGNode csgRoot = null;
 
-        public CsgMeshLeafNode(RealtimeCSG.CSGNode csgRoot, Common.Euler Orientation = null) 
+        public CsgMeshNode(RealtimeCSG.CSGNode csgRoot, Common.Euler Orientation = null) 
         {
             this.csgRoot = csgRoot;
             this.Orientation = Orientation;

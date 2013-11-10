@@ -9,9 +9,9 @@ using Gem;
 using Gem.Common;
 using Gem.Gui;
 
-namespace Gem.Gui
+namespace Gem.Render.SceneGraph
 {
-    public class SceneNode : Render.ISceneNode
+    public class SceneNode : ISceneNode
     {
         public Renderable Renderable;
 
@@ -27,19 +27,19 @@ namespace Gem.Gui
             this.Renderable = Renderable;
         }
 
-        void Render.ISceneNode.UpdateWorldTransform(Matrix m)
+        void ISceneNode.UpdateWorldTransform(Matrix m)
         {
             worldTransformation = m * Orientation.Transform;
         }
 
-        void Render.ISceneNode.Draw(Render.RenderContext context)
+        void ISceneNode.Draw(Render.RenderContext context)
         {
             Renderable.DrawEx(context, worldTransformation);
         }
 
-        void Render.ISceneNode.Visit(Action<Render.ISceneNode> callback) { callback(this); }
+        void ISceneNode.Visit(Action<ISceneNode> callback) { callback(this); }
 
-        void Render.ISceneNode.CalculateLocalMouse(Ray mouseRay, Action<VertexPositionColor, VertexPositionColor> debug)
+        void ISceneNode.CalculateLocalMouse(Ray mouseRay, Action<VertexPositionColor, VertexPositionColor> debug)
         {
             Renderable.CalculateLocalMouse(mouseRay, debug, worldTransformation);
         }

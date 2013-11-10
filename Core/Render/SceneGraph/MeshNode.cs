@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Gem.Common;
 using Gem.Geo;
 
-namespace Gem.Render
+namespace Gem.Render.SceneGraph
 {
-    public class LeafNode : ISceneNode
+    public class MeshNode : ISceneNode
     {
         public Euler Orientation = null;
 
@@ -17,7 +17,7 @@ namespace Gem.Render
         public Vector3 Color = Vector3.One;
         public Texture2D Texture = null;
 
-        public LeafNode(Mesh mesh, Euler Orientation = null) 
+        public MeshNode(Mesh mesh, Euler Orientation = null) 
         { 
             this.Mesh = mesh;
             this.Orientation = Orientation;
