@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Box2D.XNA;
+using Gem.ComponentModel;
 
 namespace Gem.Epiphany
 {

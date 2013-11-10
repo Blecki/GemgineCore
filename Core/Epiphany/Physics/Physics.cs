@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using System.ComponentModel;
+using Gem.ComponentModel;
 
 namespace Gem.Epiphany
 {

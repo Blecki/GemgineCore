@@ -9,7 +9,7 @@ using Gem;
 using Gem.Common;
 using Gem.Gui;
 
-namespace Gem.Gui
+namespace Gem.ComponentModel
 {
     public class GuiModule : IModule
     {
@@ -18,7 +18,7 @@ namespace Gem.Gui
         private Input Input = null;
         public PropertySet defaultSettings = null;
         private Simulation sim;
-        private ComponentMapping<UInt32, SceneNode> activeGuis = new ComponentMapping<uint, SceneNode>();
+        private MultiDictionary<UInt32, GuiComponent> activeGuis = new MultiDictionary<UInt32, GuiComponent>();
 
         public GuiModule(GraphicsDevice device, Input input)
         {
@@ -38,7 +38,7 @@ namespace Gem.Gui
         public void DrawGuis()
         {
             foreach (var guiNode in activeGuis)
-                DrawRoot(guiNode.uiRoot, guiNode.uiCamera, guiNode.renderTarget);
+                DrawRoot(guiNode.renderable.uiRoot, guiNode.renderable.uiCamera, guiNode.renderable.renderTarget);
         }
 
         public void DrawRoot(UIItem root, Render.Cameras.Orthographic camera, RenderTarget2D target)
@@ -62,19 +62,8 @@ namespace Gem.Gui
         void IModule.AddComponents(List<Component> components)
         {
             foreach (var component in components)
-            {
-                if (component is Render.SceneGraphRoot)
-                {
-                    (component as Render.SceneGraphRoot).rootNode.Visit(node =>
-                        {
-                            if (node is SceneNode)
-                            {
-                                activeGuis.Add(component.EntityID, node as SceneNode);
-                                (node as SceneNode).Initialize(this, device);
-                            }
-                        });
-                }
-            }
+                if (component is GuiComponent)
+                    activeGuis.Add(component.EntityID, component as GuiComponent);
         }
 
         void IModule.RemoveEntities(List<UInt32> entities)
@@ -88,9 +77,9 @@ namespace Gem.Gui
 
             foreach (var guiNode in activeGuis)
             {
-                guiNode.uiRoot.HandleMouse(guiNode.MouseHover,
-                    guiNode.LocalMouseX, guiNode.LocalMouseY, mousePressed, sim);
-                guiNode.MouseHover = false;
+                guiNode.renderable.uiRoot.HandleMouse(guiNode.renderable.MouseHover,
+                    guiNode.renderable.LocalMouseX, guiNode.renderable.LocalMouseY, mousePressed, sim);
+                guiNode.renderable.MouseHover = false;
             }
         }
 

@@ -99,7 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionHelper.cs" />
-    <Compile Include="AddMany.cs" />
+    <Compile Include="Common\MultiDictionary.cs" />
+    <Compile Include="ComponentModel\GuiComponent.cs" />
+    <Compile Include="ExtensionMethods\AddMany.cs" />
     <Compile Include="CommandLine.cs" />
     <Compile Include="Common\BufferedList.cs" />
     <Compile Include="Common\ConcurrentTaskQueue.cs" />
@@ -108,15 +110,12 @@
     <Compile Include="Common\Directions.cs" />
     <Compile Include="Common\Grid.cs" />
     <Compile Include="CompiledModel.cs" />
-    <Compile Include="Component.cs" />
-    <Compile Include="ComponentMapping.cs" />
-    <Compile Include="ConsoleBuffer.cs" />
-    <Compile Include="Console\BufferedList.cs" />
+    <Compile Include="ComponentModel\Component.cs" />
     <Compile Include="Console\DynamicConsoleBuffer.cs" />
     <Compile Include="Console\TextDisplay.cs" />
     <Compile Include="Console\Vertex.cs" />
     <Compile Include="Console\VirtualConsole.cs" />
-    <Compile Include="ConsoleWindow.cs" />
+    <Compile Include="Console\Window.cs" />
     <Compile Include="EmptyGame.cs" />
     <Compile Include="Epiphany\Box2D\Collision\BroadPhase.cs" />
     <Compile Include="Epiphany\Box2D\Collision\Collision.cs" />
@@ -199,15 +198,14 @@
     <Compile Include="Gui\GuiRenderable.cs" />
     <Compile Include="Gui\FlowLayout.cs" />
     <Compile Include="Gui\GridLayout.cs" />
-    <Compile Include="Gui\GuiModule.cs" />
+    <Compile Include="ComponentModel\GuiModule.cs" />
     <Compile Include="Gui\GuiSceneNode.cs" />
     <Compile Include="Gui\Layout.cs" />
     <Compile Include="Gui\UIItem.cs" />
     <Compile Include="IGame.cs" />
-    <Compile Include="IModule.cs" />
+    <Compile Include="ComponentModel\IModule.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="InputActionHandler.cs" />
-    <Compile Include="LocalGame.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Math\AABB.cs" />
     <Compile Include="Math\Angle.cs" />
@@ -257,6 +255,7 @@
     <Compile Include="Render\Cameras\Orbit.cs" />
     <Compile Include="Render\Cameras\Orthographic.cs" />
     <Compile Include="Render\Cameras\ZPlaneOrbit.cs" />
+    <Compile Include="Render\Renderer.cs" />
     <Compile Include="Render\SpriteNode.cs" />
     <Compile Include="Render\CsgMeshLeafNode.cs" />
     <Compile Include="Render\ICamera.cs" />
@@ -268,16 +267,16 @@
     <Compile Include="Render\MatrixStack.cs" />
     <Compile Include="Render\ObjectSet.cs" />
     <Compile Include="Render\RenderContext.cs" />
-    <Compile Include="Render\RenderModule.cs" />
+    <Compile Include="ComponentModel\RenderModule.cs" />
     <Compile Include="Render\SceneGraph.cs" />
-    <Compile Include="Simulation.cs" />
+    <Compile Include="ComponentModel\Simulation.cs" />
     <Compile Include="StateMachine\Common.cs" />
     <Compile Include="StateMachine\Machine.cs" />
     <Compile Include="StateMachine\State.cs" />
     <Compile Include="StateMachine\Transition.cs" />
     <Compile Include="TextInputHook.cs" />
     <Compile Include="TextureAlignment.cs" />
-    <Compile Include="Upsert.cs" />
+    <Compile Include="ExtensionMethods\Upsert.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ContentManifestExtensions\ContentManifestExtensions.csproj">

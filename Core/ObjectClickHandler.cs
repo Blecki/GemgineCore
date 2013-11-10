@@ -19,7 +19,7 @@ namespace Gem
             handlers.Upsert(id, ActionHelper.WrapAction(handler));
         }
 
-        public void FireMapping(UInt32 id, Simulation sim)
+        public void FireMapping(UInt32 id, Gem.ComponentModel.Simulation sim)
         {
             if (handlers.ContainsKey(id))
                 sim.EnqueueEvent("@raw-input-event", new ObjectList(handlers[id], id));

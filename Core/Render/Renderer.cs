@@ -10,14 +10,13 @@ using Gem.Common;
 
 namespace Gem.Render
 {
-    public class RenderModule : IModule
+    public class Renderer
     {
         public ICamera Camera = new Cameras.Orbit(Vector3.Zero, Vector3.UnitX, Vector3.UnitZ, 10);
         BasicEffect drawEffect;
         BasicEffect drawIDEffect;
         AlphaTestEffect drawSpriteEffect;
         ImmediateModeDebug debug;
-        ComponentMapping<uint, IRenderable> renderables = new ComponentMapping<uint,IRenderable>();
         GraphicsDevice device;
 
         RenderTarget2D mousePickTarget;
@@ -33,7 +32,7 @@ namespace Gem.Render
             debugLines.Add(new Tuple<VertexPositionColor, VertexPositionColor>(a, b));
         }
 
-        public RenderModule(GraphicsDevice device, ContentManager content)
+        public Renderer(GraphicsDevice device, ContentManager content)
         {
             this.device = device;
             debug = new ImmediateModeDebug(device);
@@ -56,11 +55,10 @@ namespace Gem.Render
             immediate2d = new ImmediateMode2d(device);
         }
 
-        public void PreDraw(float elapsedSeconds)
+        public void PreDraw(float elapsedSeconds, IRenderable renderable)
         {
             renderContext.Camera = Camera;
-            foreach (var renderable in renderables)
-                renderable.PreDraw(elapsedSeconds, device, renderContext);
+            renderable.PreDraw(elapsedSeconds, device, renderContext);
         }
 
         public Ray GetMouseRay(Vector2 mouseCoordinates)
@@ -72,14 +70,10 @@ namespace Gem.Render
             return mouseRay;
         }
 
-        public UInt32 MousePick(Vector2 mouseCoordinates)
+        public IRenderable MousePick(Vector2 mouseCoordinates, IEnumerable<IRenderable> renderables)
         {
-            //AddDebugLine(new VertexPositionColor(Vector3.Zero, Color.Red),
-            //    new VertexPositionColor(Camera.Unproject(new Vector3(mouseCoordinates, 0)), Color.Blue));
-
-            //device.SetRenderTarget(null);
             device.SetRenderTarget(mousePickTarget);
-            device.Clear(ClearOptions.Target, Vector4.One, 0xFFFFFF, 0);
+            device.Clear(ClearOptions.Target, Vector4.Zero, 0xFFFFFF, 0);
             device.BlendState = BlendState.Opaque;
 
             drawIDEffect.View = Camera.View;
@@ -90,29 +84,26 @@ namespace Gem.Render
 
             renderContextID.BeginScene(drawIDEffect, drawSpriteEffect, device);
 
-            foreach (var node in renderables)
-                {
-                    var idBytes = BitConverter.GetBytes((node as Component).EntityID);
-                    drawIDEffect.DiffuseColor =
-                        new Vector3(idBytes[0] / 255.0f, idBytes[1] / 255.0f, idBytes[2] / 255.0f);
-                    drawSpriteEffect.DiffuseColor = drawIDEffect.DiffuseColor;
-                    node.DrawEx(renderContextID);
-                }
+            var index = 1;
+            foreach (var renderable in renderables)
+            {
+                var idBytes = BitConverter.GetBytes(index);
+                drawIDEffect.DiffuseColor = new Vector3(idBytes[0] / 255.0f, idBytes[1] / 255.0f, idBytes[2] / 255.0f);
+                drawSpriteEffect.DiffuseColor = drawIDEffect.DiffuseColor;
+                renderable.DrawEx(renderContextID);
+
+                index += 1;
+            }
 
             device.SetRenderTarget(null);
             var data = new Color[1];
             mousePickTarget.GetData(data);
             var result = data[0].PackedValue & 0x00FFFFFF; //Mask off the alpha bits.
 
-            if (renderables.ContainsKey(result))
-            {
-                var mouseRay = new Ray(Camera.GetPosition(), Camera.Unproject(new Vector3(mouseCoordinates, 0)) - Camera.GetPosition());
-                mouseRay.Direction = Vector3.Normalize(mouseRay.Direction);
-                foreach (var renderable in renderables[result])
-                    renderable.CalculateLocalMouse(mouseRay, AddDebugLine);
-            }
+            if (result != 0)
+                return renderables.ElementAt((int)(result - 1));
 
-            return result;
+            return null;
         }
 
         public enum DrawModeFlag
@@ -121,7 +112,7 @@ namespace Gem.Render
             DebugOnly
         }
 
-        public void Draw(DrawModeFlag modeFlag = DrawModeFlag.Normal)
+        public void Draw(IEnumerable<IRenderable> renderables, DrawModeFlag modeFlag = DrawModeFlag.Normal)
         {
             device.SetRenderTarget(null);
             device.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
@@ -147,45 +138,6 @@ namespace Gem.Render
                 debug.Line(line.Item1, line.Item2);
             debug.Flush();
             debugLines.Clear();
-        }
-
-        public void AddRenderable(uint ID, IRenderable renderable)
-        {
-            renderables.Add(ID, renderable);
-        }
-
-        void IModule.BeginSimulation(Simulation sim)
-        {
-        }
-
-        void IModule.EndSimulation()
-        {
-        }
-
-        void IModule.AddComponents(List<Component> components)
-        {
-            foreach (var component in components)
-            {
-                if (component is IRenderable)
-                {
-                    renderables.Add(component.EntityID, component as IRenderable);
-                }
-            }
-        }
-
-        void IModule.RemoveEntities(List<UInt32> entities)
-        {
-            foreach (var id in entities) renderables.Remove(id);
-        }
-
-        void IModule.Update(float elapsedSeconds)
-        {
-        }
-
-
-        public void RemoveRenderable(int p)
-        {
-            renderables.Remove((uint)p);
         }
 
         public RenderContext GetContext()

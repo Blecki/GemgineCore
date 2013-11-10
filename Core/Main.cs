@@ -17,7 +17,7 @@ namespace Gem
         private IGame nextGame = null;
         public IGame Game { get { return activeGame; } set { nextGame = value; } }
 
-        public List<ConsoleWindow> Consoles = new List<ConsoleWindow>();
+        public List<Console.Window> Consoles = new List<Console.Window>();
 
         GraphicsDeviceManager graphics;
 
@@ -61,9 +61,9 @@ namespace Gem
             this.startupCommand = startupCommand;
         }
 
-        public ConsoleWindow AllocateConsole(Rectangle at, int width, int height)
+        public Console.Window AllocateConsole(Rectangle at, int width, int height)
         {
-            Consoles.Add(new ConsoleWindow(this, GraphicsDevice, Services, at, width, height));
+            Consoles.Add(new Console.Window(this, GraphicsDevice, Services, at, width, height));
             return Consoles[Consoles.Count - 1];
         }
 

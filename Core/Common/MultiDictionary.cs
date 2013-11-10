@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gem
+namespace Gem.Common
 {
-    public class ComponentMapping<T, C> : IEnumerable<C>
+    public class MultiDictionary<T, C> : IEnumerable<C>
     {
         private Dictionary<T, List<C>> _data = new Dictionary<T, List<C>>();
         

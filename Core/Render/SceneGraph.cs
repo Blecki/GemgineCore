@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Gem.Render
 {
-    public class SceneGraphRoot : Component, Render.IRenderable
+    public class SceneGraphRoot : Render.IRenderable
     {
         public ISceneNode rootNode = null;
 

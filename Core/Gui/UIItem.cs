@@ -30,7 +30,7 @@ namespace Gem.Gui
             Hover = false;
         }
 
-        public virtual void HandleMouse(bool mouseValid, int x, int y, bool mousePressed, Simulation sim)
+        public virtual void HandleMouse(bool mouseValid, int x, int y, bool mousePressed, ComponentModel.Simulation sim)
         {
             Hover = mouseValid && rect.Contains(x, y);
             if (Hover && mousePressed)

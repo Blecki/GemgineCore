@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace Gem
+namespace Gem.Console
 {
-    public class ConsoleWindow
+    public class Window
     {
         public Console.VirtualConsole ScriptConsole;
         public Action<String> ConsoleCommandHandler = null;
@@ -21,7 +21,7 @@ namespace Gem
         GraphicsDevice Graphics;
         IServiceProvider Services;
 
-        public ConsoleWindow(
+        public Window(
             Main Owner, 
             GraphicsDevice graphics,
             IServiceProvider services,
