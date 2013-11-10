@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Gem
+namespace Gem.Common
 {
     public class ObjectList : List<Object>
     {

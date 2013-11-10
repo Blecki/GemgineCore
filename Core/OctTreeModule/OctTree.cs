@@ -6,52 +6,41 @@ using Microsoft.Xna.Framework;
 
 namespace Gem
 {
-    public class OctCell
-    {
-        public BoundingBox box;
-        public OctCell[] children;
-        public List<OctNode> contents;
-
-        public bool Leaf { get { return children == null; } }
-
-        public OctCell(BoundingBox box) { this.box = box; }
-    }
-
     public class OctTree
     {
         public static void VisitTree(OctCell root, BoundingBox box, Action<OctCell> callback)
         {
-            if (box.Intersects(root.box))
+            if (box.Intersects(root.Bounds))
             {
                 if (root.Leaf) callback(root);
-                else foreach (var child in root.children) VisitTree(child, box, callback);
+                else foreach (var child in root.Children) VisitTree(child, box, callback);
             }
         }
 
         public static void VisitTree(OctCell root, BoundingSphere bounds, Action<OctCell> callback)
         {
-            if (bounds.Intersects(root.box))
+            if (bounds.Intersects(root.Bounds))
             {
                 if (root.Leaf) callback(root);
-                else foreach (var child in root.children) VisitTree(child, bounds, callback);
+                else foreach (var child in root.Children) VisitTree(child, bounds, callback);
             }
         }
 
         public static void VisitTree(OctCell root, BoundingFrustum frustum, Action<OctCell> callback)
         {
-            if (frustum.Intersects(root.box))
+            if (frustum.Intersects(root.Bounds))
             {
                 if (root.Leaf) callback(root);
-                else foreach (var child in root.children) VisitTree(child, frustum, callback);
+                else foreach (var child in root.Children) VisitTree(child, frustum, callback);
             }
         }
 
         public static void VisitTree(OctCell root, Ray ray, Action<OctCell> callback)
         {
-            if (ray.Intersects(root.box).HasValue)
+            if (ray.Intersects(root.Bounds).HasValue)
             {
                 if (root.Leaf) callback(root);
-                else foreach (var child in root.children) VisitTree(child, ray, callback);
+                else foreach (var child in root.Children) VisitTree(child, ray, callback);
             }
         }
 
@@ -63,8 +52,8 @@ namespace Gem
         private static OctCell[] splitCell(OctCell root)
         {
             var into = new OctCell[8];
-            var dims = (root.box.Max - root.box.Min) / 2;
-            var min = root.box.Min;
+            var dims = (root.Bounds.Max - root.Bounds.Min) / 2;
+            var min = root.Bounds.Min;
             into[0] = new OctCell(makeBox(min.X, min.Y, min.Z, dims.X, dims.Y, dims.Z));
             into[1] = new OctCell(makeBox(min.X + dims.X, min.Y, min.Z, dims.X, dims.Y, dims.Z));
             into[2] = new OctCell(makeBox(min.X, min.Y + dims.Y, min.Z, dims.X, dims.Y, dims.Z));
@@ -80,46 +69,46 @@ namespace Gem
 
         public static void BuildTree(OctCell root, BoundingBox box, Action<OctCell> forLeaves, float leafSize)
         {
-            if (box.Intersects(root.box))
+            if (box.Intersects(root.Bounds))
             {
-                if ((root.box.Max.X - root.box.Min.X) <= leafSize)
+                if ((root.Bounds.Max.X - root.Bounds.Min.X) <= leafSize)
                 {
-                    if (root.contents == null) root.contents = new List<OctNode>();
+                    if (root.Contents == null) root.Contents = new List<IOctNode>();
                     forLeaves(root);
                 }
                 else
                 {
-                    if (root.children == null) root.children = splitCell(root);
-                    foreach (var child in root.children) BuildTree(child, box, forLeaves, leafSize);
+                    if (root.Children == null) root.Children = splitCell(root);
+                    foreach (var child in root.Children) BuildTree(child, box, forLeaves, leafSize);
                 }
             }
         }
 
         public static void BuildTree(OctCell root, BoundingSphere bounds, Action<OctCell> forLeaves, float leafSize)
         {
-            if (bounds.Intersects(root.box))
+            if (bounds.Intersects(root.Bounds))
             {
-                if ((root.box.Max.X - root.box.Min.X) <= leafSize)
+                if ((root.Bounds.Max.X - root.Bounds.Min.X) <= leafSize)
                 {
-                    if (root.contents == null) root.contents = new List<OctNode>();
+                    if (root.Contents == null) root.Contents = new List<IOctNode>();
                     forLeaves(root);
                 }
                 else
                 {
-                    if (root.children == null) root.children = splitCell(root);
-                    foreach (var child in root.children) BuildTree(child, bounds, forLeaves, leafSize);
+                    if (root.Children == null) root.Children = splitCell(root);
+                    foreach (var child in root.Children) BuildTree(child, bounds, forLeaves, leafSize);
                 }
             }
         }
 
-        public static void InsertNode(OctCell root, OctNode node, float leafSize)
+        public static void InsertNode(OctCell root, IOctNode node, float leafSize)
         {
-            BuildTree(root, node.bounds, (cell) => { cell.contents.Add(node); }, leafSize);
+            BuildTree(root, node.Bounds, (cell) => { cell.Contents.Add(node); }, leafSize);
         }
 
-        public static void RemoveNode(OctCell root, OctNode node)
+        public static void RemoveNode(OctCell root, IOctNode node)
         {
-            VisitTree(root, node.bounds, (cell) => { if (cell.contents != null) cell.contents.Remove(node); });
+            VisitTree(root, node.Bounds, (cell) => { if (cell.Contents != null) cell.Contents.Remove(node); });
         }
 
 

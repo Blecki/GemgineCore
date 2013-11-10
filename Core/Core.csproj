@@ -98,18 +98,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionHelper.cs" />
+    <Compile Include="Common\ActionHelper.cs" />
     <Compile Include="Common\MultiDictionary.cs" />
     <Compile Include="ComponentModel\GuiComponent.cs" />
     <Compile Include="ExtensionMethods\AddMany.cs" />
     <Compile Include="CommandLine.cs" />
     <Compile Include="Common\BufferedList.cs" />
     <Compile Include="Common\ConcurrentTaskQueue.cs" />
-    <Compile Include="Common\Coordinate.cs" />
     <Compile Include="Common\DelayList.cs" />
-    <Compile Include="Common\Directions.cs" />
     <Compile Include="Common\Grid.cs" />
-    <Compile Include="CompiledModel.cs" />
+    <Compile Include="Geo\CompiledModel.cs" />
     <Compile Include="ComponentModel\Component.cs" />
     <Compile Include="Console\DynamicConsoleBuffer.cs" />
     <Compile Include="Console\TextDisplay.cs" />
@@ -162,7 +160,7 @@
     <Compile Include="Epiphany\Physics\PolygonPhysics.cs" />
     <Compile Include="Epiphany\Polygon.cs" />
     <Compile Include="Epiphany\PolygonDecomposition.cs" />
-    <Compile Include="Euler.cs" />
+    <Compile Include="Common\Euler.cs" />
     <Compile Include="Geo\Csg\Bevel.cs" />
     <Compile Include="Geo\Csg\ConvertToBrush.cs" />
     <Compile Include="Geo\Csg\CreateCube.cs" />
@@ -217,7 +215,7 @@
     <Compile Include="Math\Spline.cs" />
     <Compile Include="Math\Utility.cs" />
     <Compile Include="Math\Vector.cs" />
-    <Compile Include="Mesh.cs" />
+    <Compile Include="Geo\Mesh.cs" />
     <Compile Include="Network\ClientSession.cs" />
     <Compile Include="Network\ControlMessage.cs" />
     <Compile Include="Network\CriticalDatagram.cs" />
@@ -228,12 +226,13 @@
     <Compile Include="Network\ServerSession.cs" />
     <Compile Include="Network\WriteOnlyDatagram.cs" />
     <Compile Include="ObjectClickHandler.cs" />
-    <Compile Include="ObjectList.cs" />
-    <Compile Include="OctTreeModule\OctNode.cs" />
+    <Compile Include="Common\ObjectList.cs" />
+    <Compile Include="OctTreeModule\OctCell.cs" />
+    <Compile Include="OctTreeModule\IOctNode.cs" />
     <Compile Include="OctTreeModule\OctTree.cs" />
     <Compile Include="Pathfinding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertySet.cs" />
+    <Compile Include="Common\PropertySet.cs" />
     <Compile Include="RealtimeCsg\AABB.cs" />
     <Compile Include="RealtimeCsg\BrushGenerator.cs" />
     <Compile Include="RealtimeCsg\Constants.cs" />
@@ -275,7 +274,7 @@
     <Compile Include="StateMachine\State.cs" />
     <Compile Include="StateMachine\Transition.cs" />
     <Compile Include="TextInputHook.cs" />
-    <Compile Include="TextureAlignment.cs" />
+    <Compile Include="Geo\TextureAlignment.cs" />
     <Compile Include="ExtensionMethods\Upsert.cs" />
   </ItemGroup>
   <ItemGroup>

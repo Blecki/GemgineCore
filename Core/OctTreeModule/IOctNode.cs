@@ -9,10 +9,8 @@ using Gem;
 
 namespace Gem
 {
-    public class OctNode
+    public interface IOctNode
     {
-        //internal SpacialComponent spacial;
-        internal BoundingSphere bounds;
-        internal bool boundsChanged = true;
+        BoundingSphere Bounds { get; }
     }
 }
