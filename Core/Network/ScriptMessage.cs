@@ -27,10 +27,10 @@ namespace Gem.Network
             typeCodes.Upsert(typeof(UInt32), ScriptTypes.UInt32);
             typeCodes.Upsert(typeof(String), ScriptTypes.String);
             typeCodes.Upsert(typeof(Single), ScriptTypes.Single);
-            typeCodes.Upsert(typeof(ObjectList), ScriptTypes.List);
+            typeCodes.Upsert(typeof(Common.ObjectList), ScriptTypes.List);
         }
 
-        public static byte[] EncodeMessage(String ID, ObjectList Data)
+        public static byte[] EncodeMessage(String ID, Common.ObjectList Data)
         {
             Initialize();
             var datagram = new WriteOnlyDatagram();
@@ -39,15 +39,15 @@ namespace Gem.Network
             return datagram.BufferAsArray;
         }
 
-        public static void DecodeMessage(byte[] bytes, out String ID, out ObjectList Data)
+        public static void DecodeMessage(byte[] bytes, out String ID, out Common.ObjectList Data)
         {
             Initialize();
             var datagram = new ReadOnlyDatagram(bytes);
             datagram.ReadString(out ID);
             Data = DecodeList(datagram);
         }
-            
-        private static void EncodeList(ObjectList data, WriteOnlyDatagram datagram)
+
+        private static void EncodeList(Common.ObjectList data, WriteOnlyDatagram datagram)
         {
             datagram.WriteUInt((uint)data.Count, 8);
             foreach (var item in data)
@@ -67,7 +67,7 @@ namespace Gem.Network
                     switch (typeCode)
                     {
                         case ScriptTypes.List:
-                            EncodeList(item as ObjectList, datagram);
+                            EncodeList(item as Common.ObjectList, datagram);
                             break;
                         case ScriptTypes.String:
                             datagram.WriteString(item as String);
@@ -95,9 +95,9 @@ namespace Gem.Network
             }
         }
 
-        private static ObjectList DecodeList(ReadOnlyDatagram datagram)
+        private static Common.ObjectList DecodeList(ReadOnlyDatagram datagram)
         {
-            var r = new ObjectList();
+            var r = new Common.ObjectList();
             uint count = 0;
             datagram.ReadUInt(out count, 8);
             byte[] temp = new byte[4];

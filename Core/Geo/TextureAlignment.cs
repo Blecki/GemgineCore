@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace Gem
+namespace Gem.Geo
 {
     public class TextureAlignment
     {

@@ -9,15 +9,15 @@ namespace Gem.Render
 {
     public class CsgMeshLeafNode : ISceneNode
     {
-        public Euler Orientation = null;
+        public Common.Euler Orientation = null;
 
         public RealtimeCSG.CSGNode csgRoot = null;
 
-        public CsgMeshLeafNode(RealtimeCSG.CSGNode csgRoot, Euler Orientation = null) 
+        public CsgMeshLeafNode(RealtimeCSG.CSGNode csgRoot, Common.Euler Orientation = null) 
         {
             this.csgRoot = csgRoot;
             this.Orientation = Orientation;
-            if (this.Orientation == null) this.Orientation = new Euler();
+            if (this.Orientation == null) this.Orientation = new Common.Euler();
         }
 
         private Matrix worldTransformation = Matrix.Identity;

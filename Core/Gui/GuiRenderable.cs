@@ -17,7 +17,7 @@ namespace Gem.Gui
         internal Render.Cameras.Orthographic uiCamera = null;
         public UIItem uiRoot = null;
         internal RenderTarget2D renderTarget = null;
-        private CompiledModel quadModel = null;
+        private Geo.CompiledModel quadModel = null;
         public Euler Orientation;
 
         internal bool MouseHover = false;
@@ -39,7 +39,7 @@ namespace Gem.Gui
             renderTarget = new RenderTarget2D(device, uiCamera.Viewport.Width, uiCamera.Viewport.Height);
             var rawGuiQuad = Geo.Gen.CreateQuad();
             rawGuiQuad = Geo.Gen.FacetCopy(rawGuiQuad);
-            quadModel = CompiledModel.CompileModel(rawGuiQuad, device);
+            quadModel = Geo.CompiledModel.CompileModel(rawGuiQuad, device);
             uiRoot.defaults = module.defaultSettings;
         }
 

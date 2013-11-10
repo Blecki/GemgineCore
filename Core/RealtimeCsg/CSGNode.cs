@@ -77,12 +77,12 @@ namespace RealtimeCSG
 		//public Plane[] Planes;
         public BrushGenerator Generator;
         public Microsoft.Xna.Framework.Matrix WorldTransformation = Microsoft.Xna.Framework.Matrix.Identity;
-        public Gem.Euler Transformation = new Gem.Euler();
+        public Gem.Common.Euler Transformation = new Gem.Common.Euler();
         //public Microsoft.Xna.Framework.Matrix Transformation = Microsoft.Xna.Framework.Matrix.Identity;
         public Microsoft.Xna.Framework.Vector3 Color = Microsoft.Xna.Framework.Vector3.One;
         public Gem.Geo.TextureProjection TextureProjection = null;
         public Microsoft.Xna.Framework.Graphics.Texture2D Texture = null;
-        public Gem.Mesh cachedRenderMesh = null;
+        public Gem.Geo.Mesh cachedRenderMesh = null;
 
         public CSGMesh cachedMesh = null;
 	}

@@ -11,12 +11,12 @@ namespace Gem.Render
     {
         internal BranchNode parent = null;
 
-        public Euler Orientation = null;
+        public Common.Euler Orientation = null;
 
-        public BranchNode(Euler Orientation = null)
+        public BranchNode(Common.Euler Orientation = null)
         {
             this.Orientation = Orientation;
-            if (this.Orientation == null) this.Orientation = new Euler();
+            if (this.Orientation == null) this.Orientation = new Common.Euler();
         }
 
         private List<ISceneNode> children = new List<ISceneNode>();

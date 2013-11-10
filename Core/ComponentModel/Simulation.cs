@@ -14,9 +14,9 @@ namespace Gem.ComponentModel
         private UInt32 nextGlobalEntityID = 1;
         private UInt32 nextLocalEntityID = 0xFFFFFF00;
         internal Action<byte[]> sendMessageHandler = null;
-        private Dictionary<String, Action<ObjectList>> eventHandlers = new Dictionary<string, Action<ObjectList>>();
-        private Common.BufferedList<Tuple<String, ObjectList>> eventQueue = 
-            new Common.BufferedList<Tuple<String, ObjectList>>();
+        private Dictionary<String, Action<Common.ObjectList>> eventHandlers = new Dictionary<string, Action<Common.ObjectList>>();
+        private Common.BufferedList<Tuple<String, Common.ObjectList>> eventQueue =
+            new Common.BufferedList<Tuple<String, Common.ObjectList>>();
         private float cachedElapsedSeconds;
 
         public bool IsLocalEntity(UInt32 id)
@@ -28,9 +28,9 @@ namespace Gem.ComponentModel
 
         public Action<String> debugOutput = null;
         public void debug(String str) { if (debugOutput != null) debugOutput(str); }
-        public PropertySet settings;
+        public Common.PropertySet settings;
 
-        public Simulation(Microsoft.Xna.Framework.Content.ContentManager rawContent, PropertySet settings)
+        public Simulation(Microsoft.Xna.Framework.Content.ContentManager rawContent, Common.PropertySet settings)
         {
             Content = new ContentManifestExtensions.EpisodeContentManager(rawContent.ServiceProvider,
                 rawContent.RootDirectory, settings["episode-name"].ToString());
@@ -73,9 +73,9 @@ namespace Gem.ComponentModel
             this.settings = settings;
         }
 
-        public void EnqueueEvent(String id, ObjectList data)
+        public void EnqueueEvent(String id, Common.ObjectList data)
         {
-            eventQueue.Add(new Tuple<String, ObjectList>(id, data));
+            eventQueue.Add(new Tuple<String, Common.ObjectList>(id, data));
         }
 
         public T FindModule<T>() where T : class, IModule
@@ -113,7 +113,7 @@ namespace Gem.ComponentModel
             foreach (var e in eventQueue)
             {
                 Object handler = null;
-                ObjectList args = e.Item2;
+                Common.ObjectList args = e.Item2;
                 if (e.Item1 == "@raw-input-event")
                 {
                     if (args.Count > 0)
@@ -127,9 +127,9 @@ namespace Gem.ComponentModel
                 else if (eventHandlers.ContainsKey(e.Item1))
                     handler = eventHandlers[e.Item1];
                 if (handler == null) debug("Invalid queued event.");
-                if (handler is Action<ObjectList>)
+                if (handler is Action<Common.ObjectList>)
                 {
-                    (handler as Action<ObjectList>).Invoke(args);
+                    (handler as Action<Common.ObjectList>).Invoke(args);
                 }
                 else
                     debug("Invalid event handler.");
