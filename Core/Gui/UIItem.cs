@@ -30,20 +30,6 @@ namespace Gem.Gui
             Hover = false;
         }
 
-        public virtual void HandleMouse(bool mouseValid, int x, int y, bool mousePressed, ComponentModel.Simulation sim)
-        {
-            Hover = mouseValid && rect.Contains(x, y);
-            if (Hover && mousePressed)
-            {
-                var handler = GetSetting("on-click", null);
-                if (handler != null)
-                    sim.EnqueueEvent("@raw-input-event", new Common.ObjectList(handler, this));
-            }
-            if (Visible)
-                foreach (var child in children) child.HandleMouse(mouseValid, x, y, mousePressed, sim);
-           
-        }
-
         public virtual void HandleMouseEx(bool mouseValid, int x, int y, bool mousePressed, Action<Common.ObjectList> onEvent)
         {
             Hover = mouseValid && rect.Contains(x, y);

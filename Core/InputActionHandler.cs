@@ -20,12 +20,6 @@ namespace Gem
             actionMappings.Upsert(actionName, Common.ActionHelper.WrapAction(handler));
         }
 
-        public void CheckAndFireMappings(Input input, Gem.ComponentModel.Simulation sim)
-        {
-            foreach (var mapping in actionMappings)
-                if (input.Check(mapping.Key)) sim.EnqueueEvent("@raw-input-event", new Common.ObjectList(mapping.Value));
-        }
-
         public List<Common.ObjectList> CheckAndFireMappingsEx(Input input)
         {
             var r = new List<Common.ObjectList>();

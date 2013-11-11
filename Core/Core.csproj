@@ -100,7 +100,6 @@
   <ItemGroup>
     <Compile Include="Common\ActionHelper.cs" />
     <Compile Include="Common\MultiDictionary.cs" />
-    <Compile Include="ComponentModel\GuiComponent.cs" />
     <Compile Include="ExtensionMethods\AddMany.cs" />
     <Compile Include="CommandLine.cs" />
     <Compile Include="Common\BufferedList.cs" />
@@ -108,7 +107,6 @@
     <Compile Include="Common\DelayList.cs" />
     <Compile Include="Common\Grid.cs" />
     <Compile Include="Geo\CompiledModel.cs" />
-    <Compile Include="ComponentModel\Component.cs" />
     <Compile Include="Console\DynamicConsoleBuffer.cs" />
     <Compile Include="Console\TextDisplay.cs" />
     <Compile Include="Console\Vertex.cs" />
@@ -151,12 +149,10 @@
     <Compile Include="Gui\GuiRenderable.cs" />
     <Compile Include="Gui\FlowLayout.cs" />
     <Compile Include="Gui\GridLayout.cs" />
-    <Compile Include="ComponentModel\GuiModule.cs" />
     <Compile Include="Render\SceneGraph\GuiNode.cs" />
     <Compile Include="Gui\Layout.cs" />
     <Compile Include="Gui\UIItem.cs" />
     <Compile Include="IGame.cs" />
-    <Compile Include="ComponentModel\IModule.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="InputActionHandler.cs" />
     <Compile Include="Main.cs" />
@@ -180,7 +176,6 @@
     <Compile Include="Network\ScriptMessage.cs" />
     <Compile Include="Network\ServerSession.cs" />
     <Compile Include="Network\WriteOnlyDatagram.cs" />
-    <Compile Include="ObjectClickHandler.cs" />
     <Compile Include="Common\ObjectList.cs" />
     <Compile Include="Render\OctTree\OctCell.cs" />
     <Compile Include="Render\OctTree\IOctNode.cs" />
@@ -221,9 +216,7 @@
     <Compile Include="Render\MatrixStack.cs" />
     <Compile Include="Render\ObjectSet.cs" />
     <Compile Include="Render\RenderContext.cs" />
-    <Compile Include="ComponentModel\RenderModule.cs" />
     <Compile Include="Render\SceneGraph\Root.cs" />
-    <Compile Include="ComponentModel\Simulation.cs" />
     <Compile Include="TextInputHook.cs" />
     <Compile Include="Geo\TextureAlignment.cs" />
     <Compile Include="ExtensionMethods\Upsert.cs" />
