@@ -61,9 +61,9 @@ namespace Gem
             this.startupCommand = startupCommand;
         }
 
-        public Console.ConsoleWindow AllocateConsole(Rectangle at)
+        public Console.ConsoleWindow AllocateConsole(Rectangle at, int FontScale = 2)
         {
-            Consoles.Add(new Console.ConsoleWindow(GraphicsDevice, Content, at));
+            Consoles.Add(new Console.ConsoleWindow(GraphicsDevice, Content, at, FontScale));
             return Consoles[Consoles.Count - 1];
         }
 

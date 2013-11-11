@@ -9,27 +9,33 @@ using Microsoft.Xna.Framework.Input;
 namespace Gem.Console
 {
     /// <summary>
-    /// Translates keypresses into operations on a DynamicConsoleBuffer
+    /// Translates keypresses into operations on a textBufferBuffer
     /// </summary>
     public class ConsoleInputHandler
     {
-        DynamicConsoleBuffer dynamicConsole;
+        DynamicConsoleBuffer textBuffer;
         List<String> commandRecallBuffer = new List<String>();
         int recallBufferPlace = 0;
-        public Action<string> commandHandler;
-        public int displayWidth;
-        
-        private bool ctrlModifier = false;
-        private bool shiftModifier = false;
-                
+        bool ctrlModifier = false;
+        bool shiftModifier = false;
+
+        public Action<string> OnCommand;
+        public int displayWidth { get; private set; }
+
+        /// <summary>
+        /// Create a console input handler
+        /// </summary>
+        /// <param name="OnCommand">Call back to invoke when ctrl+enter is pressed</param>
+        /// <param name="Buffer">Buffer this handler will manipulate</param>
+        /// <param name="DisplayWidth">The width of the underlying display, in characters</param>
         public ConsoleInputHandler(
-            Action<String> processCommand,
-            DynamicConsoleBuffer buffer,
-            int displayWidth)
+            Action<String> OnCommand,
+            DynamicConsoleBuffer Buffer,
+            int DisplayWidth)
         {
-            this.displayWidth = displayWidth;
-            commandHandler = processCommand;
-            this.dynamicConsole = buffer;
+            this.displayWidth = DisplayWidth;
+            this.OnCommand = OnCommand;
+            this.textBuffer = Buffer;
         }
 
         public void KeyDown(System.Windows.Forms.Keys key, int keyValue)
@@ -38,77 +44,85 @@ namespace Gem.Console
                 ctrlModifier = true;
             else if (keyValue == (int)System.Windows.Forms.Keys.ShiftKey)
                 shiftModifier = true;
-            else if (key == System.Windows.Forms.Keys.Right && ctrlModifier == true)
+            else if (key == System.Windows.Forms.Keys.Right && ctrlModifier == true) 
             {
-                if (dynamicConsole.activeInput == dynamicConsole.inputs[0])
-                    dynamicConsole.activeInput = dynamicConsole.inputs[1];
+                //Ctrl + right switches inputs
+                if (textBuffer.activeInput == textBuffer.inputs[0])
+                    textBuffer.activeInput = textBuffer.inputs[1];
                 else
-                    dynamicConsole.activeInput = dynamicConsole.inputs[0];
+                    textBuffer.activeInput = textBuffer.inputs[0];
             }
             else if (key == System.Windows.Forms.Keys.Up && ctrlModifier == true)
             {
-                dynamicConsole.outputScrollPoint += 1;
+                //Ctrl + up scrolls the output window
+                textBuffer.outputScrollPoint += 1;
             }
             else if (key == System.Windows.Forms.Keys.Down && ctrlModifier == true)
             {
-                dynamicConsole.outputScrollPoint -= 1;
-                if (dynamicConsole.outputScrollPoint < 0) dynamicConsole.outputScrollPoint = 0;
+                //Ctrl + down scrolls the output window
+                textBuffer.outputScrollPoint -= 1;
+                if (textBuffer.outputScrollPoint < 0) textBuffer.outputScrollPoint = 0;
             }
             else if (key == System.Windows.Forms.Keys.Up && shiftModifier == true)
             {
+                //Shift + up recalls the previous command
                 if (commandRecallBuffer.Count != 0)
                 {
                     recallBufferPlace -= 1;
                     if (recallBufferPlace < 0) recallBufferPlace = commandRecallBuffer.Count - 1;
-                    dynamicConsole.activeInput.cursor = 0;
-                    dynamicConsole.activeInput.input = commandRecallBuffer[recallBufferPlace];
+                    textBuffer.activeInput.cursor = 0;
+                    textBuffer.activeInput.input = commandRecallBuffer[recallBufferPlace];
                 }
             }
             else if (key == System.Windows.Forms.Keys.Down && shiftModifier == true)
             {
+                //Shift + down recalls the next command, if there is one.
                 if (commandRecallBuffer.Count != 0)
                 {
                     recallBufferPlace += 1;
                     if (recallBufferPlace >= commandRecallBuffer.Count) recallBufferPlace = 0;
-                    dynamicConsole.activeInput.cursor = 0;
-                    dynamicConsole.activeInput.input = commandRecallBuffer[recallBufferPlace];
+                    textBuffer.activeInput.cursor = 0;
+                    textBuffer.activeInput.input = commandRecallBuffer[recallBufferPlace];
                 }
             }
             else if (key == System.Windows.Forms.Keys.Up && ctrlModifier == false)
             {
-                dynamicConsole.activeInput.cursor -= displayWidth;
-                if (dynamicConsole.activeInput.cursor < 0) dynamicConsole.activeInput.cursor += displayWidth;
+                //Arrows move in the input
+                textBuffer.activeInput.cursor -= displayWidth;
+                if (textBuffer.activeInput.cursor < 0) textBuffer.activeInput.cursor += displayWidth;
             }
             else if (key == System.Windows.Forms.Keys.Down && ctrlModifier == false)
             {
-                dynamicConsole.activeInput.cursor += displayWidth;
-                if (dynamicConsole.activeInput.cursor > dynamicConsole.activeInput.input.Length)
-                    dynamicConsole.activeInput.cursor = dynamicConsole.activeInput.input.Length;
+                textBuffer.activeInput.cursor += displayWidth;
+                if (textBuffer.activeInput.cursor > textBuffer.activeInput.input.Length)
+                    textBuffer.activeInput.cursor = textBuffer.activeInput.input.Length;
             }
             else if (key == System.Windows.Forms.Keys.Left && ctrlModifier == false)
             {
-                dynamicConsole.activeInput.cursor -= 1;
-                if (dynamicConsole.activeInput.cursor < 0) dynamicConsole.activeInput.cursor = 0;
+                textBuffer.activeInput.cursor -= 1;
+                if (textBuffer.activeInput.cursor < 0) textBuffer.activeInput.cursor = 0;
             }
             else if (key == System.Windows.Forms.Keys.Right && ctrlModifier == false)
             {
-                dynamicConsole.activeInput.cursor += 1;
-                if (dynamicConsole.activeInput.cursor > dynamicConsole.activeInput.input.Length)
-                    dynamicConsole.activeInput.cursor = dynamicConsole.activeInput.input.Length;
+                textBuffer.activeInput.cursor += 1;
+                if (textBuffer.activeInput.cursor > textBuffer.activeInput.input.Length)
+                    textBuffer.activeInput.cursor = textBuffer.activeInput.input.Length;
             }
             else if (key == System.Windows.Forms.Keys.Delete && ctrlModifier == false)
             {
-                var front = dynamicConsole.activeInput.cursor;
-                var sofar = dynamicConsole.activeInput.input.Substring(0, front);
-                var back = dynamicConsole.activeInput.input.Length - dynamicConsole.activeInput.cursor - 1;
-                if (back > 0) sofar += dynamicConsole.activeInput.input.Substring(dynamicConsole.activeInput.cursor + 1, back);
-                dynamicConsole.activeInput.input = sofar;
+                //Delete
+                var front = textBuffer.activeInput.cursor;
+                var sofar = textBuffer.activeInput.input.Substring(0, front);
+                var back = textBuffer.activeInput.input.Length - textBuffer.activeInput.cursor - 1;
+                if (back > 0) sofar += textBuffer.activeInput.input.Substring(textBuffer.activeInput.cursor + 1, back);
+                textBuffer.activeInput.input = sofar;
             }
 
         }
 
         public void KeyUp(System.Windows.Forms.Keys key, int keyValue)
         {
+            //Just need to update ctrl/shift flags
             if (keyValue == (int)System.Windows.Forms.Keys.ControlKey)
                 ctrlModifier = false;
             else if (keyValue == (int)System.Windows.Forms.Keys.ShiftKey)
@@ -121,64 +135,69 @@ namespace Gem.Console
             {
                 if (keyChar == '\n')
                 {
-                    dynamicConsole.Write(dynamicConsole.activeInput.input + "\n");
-                    var s = dynamicConsole.activeInput.input;
-                    dynamicConsole.activeInput.input = "";
-                    dynamicConsole.outputScrollPoint = 0;
-                    dynamicConsole.activeInput.cursor = 0;
-                    dynamicConsole.activeInput.scroll = 0;
+                    //Store input in recall buffer, clear input, and invoke command handler.
+                    textBuffer.Write(textBuffer.activeInput.input + "\n");
+                    var s = textBuffer.activeInput.input;
+                    textBuffer.activeInput.input = "";
+                    textBuffer.outputScrollPoint = 0;
+                    textBuffer.activeInput.cursor = 0;
+                    textBuffer.activeInput.scroll = 0;
                     commandRecallBuffer.Add(s);
                     recallBufferPlace = commandRecallBuffer.Count;
-                    commandHandler(s);
+                    OnCommand(s);
                 }
             }
             else
             {
                 if (keyChar == (char)System.Windows.Forms.Keys.Enter)
                 {
-                    var newPosition = (int)System.Math.Ceiling((float)(dynamicConsole.activeInput.cursor + 1) / displayWidth)
+                    //Newline. Hack, since underlying display doesn't handle layout.
+                    var newPosition = (int)System.Math.Ceiling((float)(textBuffer.activeInput.cursor + 1) / displayWidth)
                         * displayWidth;
-                    if (dynamicConsole.activeInput.cursor < dynamicConsole.activeInput.input.Length)
-                        dynamicConsole.activeInput.input =
-                            dynamicConsole.activeInput.input.Insert(dynamicConsole.activeInput.cursor,
-                            new String(' ', newPosition - dynamicConsole.activeInput.cursor));
+                    if (textBuffer.activeInput.cursor < textBuffer.activeInput.input.Length)
+                        textBuffer.activeInput.input =
+                            textBuffer.activeInput.input.Insert(textBuffer.activeInput.cursor,
+                            new String(' ', newPosition - textBuffer.activeInput.cursor));
                     else
-                        dynamicConsole.activeInput.input += new String(' ', newPosition - dynamicConsole.activeInput.cursor);
-                    dynamicConsole.activeInput.cursor = newPosition;
+                        textBuffer.activeInput.input += new String(' ', newPosition - textBuffer.activeInput.cursor);
+                    textBuffer.activeInput.cursor = newPosition;
                 }
                 else if (keyChar == (char)System.Windows.Forms.Keys.Tab)
                 {
-                    var newPosition = (int)System.Math.Ceiling((float)(dynamicConsole.activeInput.cursor + 1) / 4) * 4;
-                    if (dynamicConsole.activeInput.cursor < dynamicConsole.activeInput.input.Length)
-                        dynamicConsole.activeInput.input =
-                            dynamicConsole.activeInput.input.Insert(dynamicConsole.activeInput.cursor,
-                            new String(' ', newPosition - dynamicConsole.activeInput.cursor));
+                    //Tab. Convertted to spaces immediately.
+                    var newPosition = (int)System.Math.Ceiling((float)(textBuffer.activeInput.cursor + 1) / 4) * 4;
+                    if (textBuffer.activeInput.cursor < textBuffer.activeInput.input.Length)
+                        textBuffer.activeInput.input =
+                            textBuffer.activeInput.input.Insert(textBuffer.activeInput.cursor,
+                            new String(' ', newPosition - textBuffer.activeInput.cursor));
                     else
-                        dynamicConsole.activeInput.input += new String(' ', newPosition - dynamicConsole.activeInput.cursor);
-                    dynamicConsole.activeInput.cursor = newPosition;
+                        textBuffer.activeInput.input += new String(' ', newPosition - textBuffer.activeInput.cursor);
+                    textBuffer.activeInput.cursor = newPosition;
                 }
                 else if (keyChar == (char)System.Windows.Forms.Keys.Back)
                 {
-                    if (dynamicConsole.activeInput.cursor > 0)
+                    //Backspace.
+                    if (textBuffer.activeInput.cursor > 0)
                     {
-                        var front = dynamicConsole.activeInput.cursor - 1;
-                        var sofar = dynamicConsole.activeInput.input.Substring(0, front);
-                        var back = dynamicConsole.activeInput.input.Length - dynamicConsole.activeInput.cursor;
+                        var front = textBuffer.activeInput.cursor - 1;
+                        var sofar = textBuffer.activeInput.input.Substring(0, front);
+                        var back = textBuffer.activeInput.input.Length - textBuffer.activeInput.cursor;
                         if (back > 0) sofar +=
-                            dynamicConsole.activeInput.input.Substring(dynamicConsole.activeInput.cursor, back);
-                        dynamicConsole.activeInput.input = sofar;
-                        dynamicConsole.activeInput.cursor -= 1;
+                            textBuffer.activeInput.input.Substring(textBuffer.activeInput.cursor, back);
+                        textBuffer.activeInput.input = sofar;
+                        textBuffer.activeInput.cursor -= 1;
                     }
                 }
                 else
                 {
-                    if (dynamicConsole.activeInput.cursor < dynamicConsole.activeInput.input.Length)
-                        dynamicConsole.activeInput.input =
-                            dynamicConsole.activeInput.input.Insert(dynamicConsole.activeInput.cursor,
+                    //If we made it here, the key must be an ordinary key.
+                    if (textBuffer.activeInput.cursor < textBuffer.activeInput.input.Length)
+                        textBuffer.activeInput.input =
+                            textBuffer.activeInput.input.Insert(textBuffer.activeInput.cursor,
                             new String(keyChar, 1));
                     else
-                        dynamicConsole.activeInput.input += keyChar;
-                    dynamicConsole.activeInput.cursor += 1;
+                        textBuffer.activeInput.input += keyChar;
+                    textBuffer.activeInput.cursor += 1;
                 }
             }
 

@@ -12,6 +12,7 @@ namespace BaseDemo
         {
             using (var game = new Gem.Main(""))
             {
+                game.Game = new ConsoleDemo();
                 game.Run();
             }
         }

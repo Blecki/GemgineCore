@@ -25,22 +25,22 @@ namespace Gem.Console
         
         Line[] lines;
         IndexBuffer indexBuffer;
-        
         Effect effect;
 
-        public int width { get; private set; }
-        public int height { get; private set; }
-        public Gem.Gui.BitmapFont Font;
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+        public Gem.Gui.BitmapFont Font { get; private set; }
 
         public ConsoleDisplay(int width, int height, Gui.BitmapFont font, GraphicsDevice device, ContentManager content)
         {
-            this.width = width;
-            this.height = height;
+            this.Width = width;
+            this.Height = height;
 
             this.Font = font;
             effect = content.Load<Effect>("Content/draw-console");
 
-            lines = new Line[height];
+
+            //Prepare the index buffer.
             var indicies = new short[width * 6];
             for (int i = 0; i < width; ++i)
             {
@@ -55,6 +55,9 @@ namespace Gem.Console
             indexBuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, indicies.Length, BufferUsage.WriteOnly);
             indexBuffer.SetData(indicies);
 
+            //Prepare vertex buffers
+            lines = new Line[height];
+        
             for (int y = 0; y < height; ++y)
             {
                 lines[y] = new Line();
@@ -79,22 +82,36 @@ namespace Gem.Console
             }
         }
 
+        /// <summary>
+        /// Set the character at a certain point in the grid.
+        /// </summary>
+        /// <param name="place">The point to set the character at, treating the grid like a 1-dimensional array.</param>
+        /// <param name="character">The character to set. Supported characters vary by font.</param>
+        /// <param name="fg">Foreground color. Null if no change to color data.</param>
+        /// <param name="bg">Background color. Null if no change to color data.</param>
         public void SetChar(int place, int character, Color? fg = null, Color? bg = null)
         {
+            //Find character in font
             var charX = character % Font.Columns;
             var charY = character / Font.Columns;
 
-            var row = place / width;
-            place %= width;
+            //Convert place to row/column format
+            var row = place / Width;
+            place %= Width;
 
-            lines[row].verts[place * 4 + 0].TextureCoordinate =
-                new Vector2((float)(charX * Font.fgWidth), (float)(charY * Font.fgHeight));
-            lines[row].verts[place * 4 + 1].TextureCoordinate =
-                new Vector2((float)((charX + 1) * Font.fgWidth), (float)(charY * Font.fgHeight));
-            lines[row].verts[place * 4 + 2].TextureCoordinate =
-                new Vector2((float)((charX + 1) * Font.fgWidth), (float)((charY + 1) * Font.fgHeight));
-            lines[row].verts[place * 4 + 3].TextureCoordinate =
-                new Vector2((float)(charX * Font.fgWidth), (float)((charY + 1) * Font.fgHeight));
+            //Map glyph to quad
+            lines[row].verts[place * 4 + 0].TextureCoordinate = new Vector2(
+                (float)(charX * Font.fgWidth), 
+                (float)(charY * Font.fgHeight));
+            lines[row].verts[place * 4 + 1].TextureCoordinate = new Vector2(
+                (float)((charX + 1) * Font.fgWidth), 
+                (float)(charY * Font.fgHeight));
+            lines[row].verts[place * 4 + 2].TextureCoordinate = new Vector2(
+                (float)((charX + 1) * Font.fgWidth),
+                (float)((charY + 1) * Font.fgHeight));
+            lines[row].verts[place * 4 + 3].TextureCoordinate = new Vector2(
+                (float)(charX * Font.fgWidth), 
+                (float)((charY + 1) * Font.fgHeight));
 
             if (fg != null)
             {
@@ -126,17 +143,23 @@ namespace Gem.Console
                     lines[start].dirty = false;
                 }
                 device.SetVertexBuffer(lines[start].buffer);
-                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, width * 4, 0, width * 2);
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, Width * 4, 0, Width * 2);
                 ++start;
             }
         }
 
+        /// <summary>
+        /// Draw the text grid. The drawn grid always fills the entire viewport.
+        /// </summary>
+        /// <param name="device"></param>
         public void Draw(GraphicsDevice device)
         {
             effect.Parameters["Texture"].SetValue(Font.fontData);
-            effect.Parameters["Projection"].SetValue(Matrix.CreateOrthographicOffCenter(0, width * Font.glyphWidth, 
-                height * Font.glyphHeight, 0, -1, 1));
+            effect.Parameters["Projection"].SetValue(
+                Matrix.CreateOrthographicOffCenter(0, Width * Font.glyphWidth, Height * Font.glyphHeight, 0, -1, 1));
             effect.Parameters["View"].SetValue(Matrix.Identity);
+            effect.Parameters["World"].SetValue(Matrix.Identity);
+
             effect.CurrentTechnique = effect.Techniques[0];
 
             device.DepthStencilState = DepthStencilState.None;
@@ -144,9 +167,9 @@ namespace Gem.Console
 
             device.Indices = indexBuffer;
 
-            effect.Parameters["World"].SetValue(Matrix.Identity);
             effect.CurrentTechnique.Passes[0].Apply();
-            drawRows(0, height, device);
+
+            drawRows(0, Height, device);
 
             device.SetVertexBuffer(null);
         }

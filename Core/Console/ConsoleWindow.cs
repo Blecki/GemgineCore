@@ -19,7 +19,25 @@ namespace Gem.Console
         public Action<String> ConsoleCommandHandler = null;
         public Rectangle ScreenPosition { get; private set; }
         public Rectangle ActualDrawSize { get; private set; }
-        
+
+        public String Title
+        {
+            get { return Buffer.title; }
+            set { Buffer.title = value; }
+        }
+
+        public String Info
+        {
+            get { return Buffer.info; }
+            set { Buffer.info = value; }
+        }
+
+        public bool HideInput
+        {
+            get { return Buffer.InputHidden; }
+            set { Buffer.InputHidden = value; }
+        }
+
         GraphicsDevice Graphics;
         ContentManager Content;
         
@@ -36,20 +54,21 @@ namespace Gem.Console
         public ConsoleWindow(
             GraphicsDevice Graphics,
             ContentManager Content,
-            Rectangle ScreenPosition)
+            Rectangle ScreenPosition,
+            int FontScale)
         {
             this.Graphics = Graphics;
             this.Content = Content;
 
             font = new Gui.BitmapFont(Content.Load<Texture2D>("Content/small-font"), 6, 8, 6);
 
-            Resize(ScreenPosition);
+            Resize(ScreenPosition, FontScale);
         }
 
-        public void Resize(Rectangle ScreenPosition)
+        public void Resize(Rectangle ScreenPosition, int FontScale)
         {
-            int width = ScreenPosition.Width / 12;
-            int height = ScreenPosition.Height / 16; 
+            int width = ScreenPosition.Width / (6 * FontScale);
+            int height = ScreenPosition.Height / (8 * FontScale); 
 
             var rowSize = ScreenPosition.Height / height;
             var realHeight = height * rowSize;
@@ -67,7 +86,7 @@ namespace Gem.Console
             InputHandler = new ConsoleInputHandler(ConsoleCommandHandler, Buffer, width);
 
             this.ScreenPosition = ScreenPosition;
-            ConsoleRenderSurface = new RenderTarget2D(Graphics, ScreenPosition.Width, ScreenPosition.Height, false,
+            ConsoleRenderSurface = new RenderTarget2D(Graphics, width * font.glyphWidth, height * font.glyphHeight, false,
                 SurfaceFormat.Color, DepthFormat.Depth16);
         }
 
