@@ -5,6 +5,14 @@ using System.Text;
 
 namespace Gem.Common
 {
+    /// <summary>
+    /// Implements a buffered list. 
+    /// Allows new elements to be added to the list while enumerating it. 
+    /// New items are saved for the next enumeration.
+    /// 
+    /// After enumerating, call ClearAndSwap to prepare for the next enumeration.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
 	public class BufferedList<T>
 	{
 		private List<T> _front = new List<T>();
@@ -26,6 +34,12 @@ namespace Gem.Common
 		{
 			_front.Clear();
 		}
+
+        public void ClearAndSwap()
+        {
+            ClearFront();
+            Swap();
+        }
 
 		public void Add(T _t)
 		{

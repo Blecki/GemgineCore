@@ -13,17 +13,27 @@ namespace Gem.Gui
 {
     public class BitmapFont
     {
-        private Texture2D fontData;
-        public float glypthWidth;
-        public float glypthHeight;
-        public float kerningWidth;
+        public Texture2D fontData;
+        public int glyphWidth;
+        public int glyphHeight;
+        public int kerningWidth;
 
-        public BitmapFont(Texture2D font, float gWidth, float gHeight, float kWidth)
+        public double fgWidth;
+        public double fgHeight;
+
+        public int Columns { get; private set; }
+
+        public BitmapFont(Texture2D font, int gWidth, int gHeight, int kWidth)
         {
             fontData = font;
-            glypthWidth = gWidth;
-            glypthHeight = gHeight;
+            glyphWidth = gWidth;
+            glyphHeight = gHeight;
             kerningWidth = kWidth;
+
+            Columns = (int)font.Width / glyphWidth;
+
+            fgWidth = (double)glyphWidth / (double)font.Width;
+            fgHeight = (double)glyphHeight / (double)font.Height;
         }
 
         public static void RenderText(
@@ -34,14 +44,14 @@ namespace Gem.Gui
             var x = X;
             var y = Y;
 
-            var kx = (font.glypthWidth - font.kerningWidth) / 2;
-            int col = (int)font.fontData.Width / (int)font.glypthWidth;
+            var kx = (font.glyphWidth - font.kerningWidth) / 2;
+            int col = (int)font.fontData.Width / (int)font.glyphWidth;
 
             for (var i = 0; i < text.Length; ++i)
             {
                 if (x >= wrapAt)
                 {
-                    y += font.glypthHeight;
+                    y += font.glyphHeight;
                     x = X;
                 }
 
@@ -49,7 +59,7 @@ namespace Gem.Gui
                 if (code == '\n')
                 {
                     x = X;
-                    y += font.glypthHeight;
+                    y += font.glyphHeight;
                 }
                 else if (code == ' ')
                 {
@@ -57,14 +67,12 @@ namespace Gem.Gui
                 }
                 else if (code < 0x80)
                 {
-                    //code -= (char)0x20;
-                    float fx = (code % col) * font.glypthWidth;
-                    float fy = (code / col) * font.glypthHeight;
+                    float fx = (code % col) * font.glyphWidth;
+                    float fy = (code / col) * font.glyphHeight;
 
-                    context.Glyph(x, y, font.glypthWidth, font.glypthHeight, fx / font.fontData.Width,
-                        fy / font.fontData.Height, font.glypthWidth / font.fontData.Width,
-                        font.glypthHeight / font.fontData.Height, depth);
-                    //context.Quad(X, Y, font.glypthWidth, font.glypthHeight, fx, fy, font.glypthWidth, font.glyphHeight
+                    context.Glyph(x, y, font.glyphWidth, font.glyphHeight, fx / font.fontData.Width,
+                        fy / font.fontData.Height, (float)font.glyphWidth / (float)font.fontData.Width,
+                        (float)font.glyphHeight / (float)font.fontData.Height, depth);
 
                     x += font.kerningWidth;
                 }

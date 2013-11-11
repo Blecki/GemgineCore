@@ -11,47 +11,33 @@ namespace Gem.Gui
         public UIItem parent;
         public int id;
         public bool Visible = true;
-        public PropertySet defaults;
-        public PropertySet settings;
-        public PropertySet hoverSettings;
+        public Common.PropertySet defaults;
+        public Common.PropertySet settings;
+        public Common.PropertySet hoverSettings;
         public bool Hover { get; set; }
         
         public UIItem root { 
             get { if (parent == null) return this;
                 return parent.root; }}
 
-        public UIItem(Rectangle rect, PropertySet settings = null, PropertySet hoverSettings = null)
+        public UIItem(Rectangle rect, Common.PropertySet settings = null, Common.PropertySet hoverSettings = null)
         {
             this.settings = settings;
-            if (this.settings == null) this.settings = new PropertySet();
+            if (this.settings == null) this.settings = new Common.PropertySet();
             this.hoverSettings = hoverSettings;
 
             this.rect = rect;
             Hover = false;
         }
 
-        public virtual void HandleMouse(bool mouseValid, int x, int y, bool mousePressed, Simulation sim)
+        public virtual void HandleMouseEx(bool mouseValid, int x, int y, bool mousePressed, Action<Common.ObjectList> onEvent)
         {
             Hover = mouseValid && rect.Contains(x, y);
             if (Hover && mousePressed)
             {
                 var handler = GetSetting("on-click", null);
                 if (handler != null)
-                    sim.EnqueueEvent("@raw-input-event", new ObjectList(handler, this));
-            }
-            if (Visible)
-                foreach (var child in children) child.HandleMouse(mouseValid, x, y, mousePressed, sim);
-           
-        }
-
-        public virtual void HandleMouseEx(bool mouseValid, int x, int y, bool mousePressed, Action<ObjectList> onEvent)
-        {
-            Hover = mouseValid && rect.Contains(x, y);
-            if (Hover && mousePressed)
-            {
-                var handler = GetSetting("on-click", null);
-                if (handler != null)
-                    onEvent(new ObjectList(handler, this));
+                    onEvent(new Common.ObjectList(handler, this));
             }
             if (Visible)
                 foreach (var child in children) child.HandleMouseEx(mouseValid, x, y, mousePressed, onEvent);

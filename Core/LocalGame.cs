@@ -13,7 +13,7 @@ namespace Gem
         public Input Input { get; set; }
         public Main Main { get; set; }
 
-        Simulation simulation;
+        ComponentModel.Simulation simulation;
 
         Render.RenderModule renderModule = null;
         InputActionHandler actionHandler = new InputActionHandler();

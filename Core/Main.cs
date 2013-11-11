@@ -17,7 +17,7 @@ namespace Gem
         private IGame nextGame = null;
         public IGame Game { get { return activeGame; } set { nextGame = value; } }
 
-        public List<ConsoleWindow> Consoles = new List<ConsoleWindow>();
+        public List<Console.ConsoleWindow> Consoles = new List<Console.ConsoleWindow>();
 
         GraphicsDeviceManager graphics;
 
@@ -33,19 +33,19 @@ namespace Gem
         public void ReportException(Exception e)
         {
             ConsoleOpen = true;
-            Consoles[0].ScriptConsole.WriteLine(e.Message);
-            Consoles[0].ScriptConsole.WriteLine(e.StackTrace);
+            Consoles[0].WriteLine(e.Message);
+            Consoles[0].WriteLine(e.StackTrace);
         }
 
         public void ReportError(String msg)
         {
             ConsoleOpen = true;
-            Consoles[0].ScriptConsole.WriteLine(msg);
+            Consoles[0].WriteLine(msg);
         }
 
         public void Write(String msg)
         {
-            Consoles[0].ScriptConsole.Write(msg);
+            Consoles[0].Write(msg);
         }
 
         public Main(String startupCommand)
@@ -61,9 +61,9 @@ namespace Gem
             this.startupCommand = startupCommand;
         }
 
-        public ConsoleWindow AllocateConsole(Rectangle at, int width, int height)
+        public Console.ConsoleWindow AllocateConsole(Rectangle at, int FontScale = 2)
         {
-            Consoles.Add(new ConsoleWindow(this, GraphicsDevice, Services, at, width, height));
+            Consoles.Add(new Console.ConsoleWindow(GraphicsDevice, Content, at, FontScale));
             return Consoles[Consoles.Count - 1];
         }
 
@@ -74,37 +74,16 @@ namespace Gem
 
         protected override void LoadContent()
         {
-            AllocateConsole(new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height),
-                GraphicsDevice.Viewport.Width / 12, GraphicsDevice.Viewport.Height / 16);
+            var mainConsole = AllocateConsole(new Rectangle(0, 0, 800, 600));
             Immediate2d = new Gem.Render.ImmediateMode2d(GraphicsDevice);
 
-            if (!String.IsNullOrEmpty(startupCommand))
-            {
-   //             System.Console.WriteLine(startupCommand);
-  //              InjectAction(() => { ScriptEngine.ExecuteCommand(startupCommand); });
-            }
-
-            Input.textHook.KeyDown += (hook, args) =>
-                {
-                    if (ConsoleOpen)
-                        Consoles[0].ScriptConsole.KeyDown(args.KeyCode, args.KeyValue);
-                };
-
-            Input.textHook.KeyUp += (hook, args) =>
-                {
-                    //if (consoleOpen)
-                    Consoles[0].ScriptConsole.KeyUp(args.KeyCode, args.KeyValue);
-                };
+            mainConsole.BindKeyboard(() => ConsoleOpen, Input);
 
             Input.textHook.KeyPress += (hook, args) =>
                 {
                     if (args.KeyChar == '~')
                         ConsoleOpen = !ConsoleOpen;
-                    else if (ConsoleOpen)
-                        Consoles[0].ScriptConsole.KeyPress(args.KeyChar);
                 };
-
-            //if (activeGame == null) this.Game = new EmptyGame();
         }
 
         protected override void UnloadContent()
@@ -172,23 +151,21 @@ namespace Gem
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
             if (ConsoleOpen)
                 foreach (var consoleWindow in Consoles)
-                    consoleWindow.ScriptConsole.Draw(consoleWindow.ConsoleRenderSurface);
+                    consoleWindow.PrepareImage();
 
             if (activeGame != null) activeGame.Draw((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             if (ConsoleOpen)
             {
+                Immediate2d.Camera.focus = new Vector2(Immediate2d.Camera.Viewport.Width / 2,
+                    Immediate2d.Camera.Viewport.Height / 2);
+                Immediate2d.BeginScene(null, false);
+
                 foreach (var consoleWindow in Consoles)
-                {
-                    Immediate2d.Camera.focus = new Vector2(Immediate2d.Camera.Viewport.Width / 2,
-                        Immediate2d.Camera.Viewport.Height / 2);
-                    Immediate2d.BeginScene(null, false);
-                    Immediate2d.Texture = consoleWindow.ConsoleRenderSurface;
-                    Immediate2d.Alpha = 0.75f;
-                    Immediate2d.Quad(consoleWindow.ScreenPosition);
-                }
+                    consoleWindow.Draw(Immediate2d);
             }
             
             base.Draw(gameTime);

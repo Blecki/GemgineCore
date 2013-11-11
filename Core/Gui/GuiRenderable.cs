@@ -14,10 +14,10 @@ namespace Gem.Gui
     public class Renderable : Render.IRenderable
     {
         private GuiDriver module = null;
-        internal Render.Cameras.Orthographic uiCamera = null;
+        internal Render.Cameras.OrthographicCamera uiCamera = null;
         public UIItem uiRoot = null;
         internal RenderTarget2D renderTarget = null;
-        private CompiledModel quadModel = null;
+        private Geo.CompiledModel quadModel = null;
         public Euler Orientation;
 
         internal bool MouseHover = false;
@@ -30,7 +30,7 @@ namespace Gem.Gui
             this.Orientation = Euler;
             if (this.Orientation == null) this.Orientation = new Euler();
 
-            uiCamera = new Render.Cameras.Orthographic(new Viewport(0, 0, width, height));
+            uiCamera = new Render.Cameras.OrthographicCamera(new Viewport(0, 0, width, height));
             uiRoot = new UIItem(new Rectangle(0, 0, width, height));
             uiRoot.settings = new PropertySet();
 
@@ -39,7 +39,7 @@ namespace Gem.Gui
             renderTarget = new RenderTarget2D(device, uiCamera.Viewport.Width, uiCamera.Viewport.Height);
             var rawGuiQuad = Geo.Gen.CreateQuad();
             rawGuiQuad = Geo.Gen.FacetCopy(rawGuiQuad);
-            quadModel = CompiledModel.CompileModel(rawGuiQuad, device);
+            quadModel = Geo.CompiledModel.CompileModel(rawGuiQuad, device);
             uiRoot.defaults = module.defaultSettings;
         }
 
@@ -52,6 +52,11 @@ namespace Gem.Gui
 
         public void CalculateLocalMouse(Ray mouseRay, Action<VertexPositionColor, VertexPositionColor> debug)
         {
+            CalculateLocalMouse(mouseRay, debug, Orientation.Transform);
+        }
+
+        public void CalculateLocalMouse(Ray mouseRay, Action<VertexPositionColor, VertexPositionColor> debug, Matrix worldTransform)
+        {
             MouseHover = false;
 
             var verts = new Vector3[3];
@@ -60,7 +65,7 @@ namespace Gem.Gui
             verts[2] = new Vector3(-0.5f, 0.5f, 0);
 
             for (int i = 0; i < 3; ++i)
-                verts[i] = Vector3.Transform(verts[i], Orientation.Transform);
+                verts[i] = Vector3.Transform(verts[i], worldTransform);
 
             debug(new VertexPositionColor(verts[0], Color.Red), new VertexPositionColor(verts[1], Color.Red));
             debug(new VertexPositionColor(verts[0], Color.Green), new VertexPositionColor(verts[2], Color.Green));
@@ -88,14 +93,19 @@ namespace Gem.Gui
 
         public void DrawEx(Render.RenderContext context)
         {
+            DrawEx(context, Orientation.Transform);
+        }
+
+        public void DrawEx(Render.RenderContext context, Matrix worldTransform)
+        {
             context.Color = Vector3.One;
             context.Texture = renderTarget;
-            context.World = Orientation.Transform;
+            context.World = worldTransform;
             context.ApplyChanges();
             context.Draw(quadModel);
         }
 
-        public void DrawFlat(Render.RenderContext context, Gem.Render.Cameras.Orthographic Camera)
+        public void DrawFlat(Render.RenderContext context, Gem.Render.Cameras.OrthographicCamera Camera)
         {
             var uiContext = module.GetRenderContext();
             uiContext.Camera = Camera;

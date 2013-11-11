@@ -11,8 +11,8 @@ namespace Gem.Render
     {
         public GraphicsDevice GraphicsDevice { get; private set; }
 
-        private Cameras.Orthographic _camera = null;
-        public Cameras.Orthographic Camera { get { return _camera; } set { _camera = value; stateChanges = true; } }
+        private Cameras.OrthographicCamera _camera = null;
+        public Cameras.OrthographicCamera Camera { get { return _camera; } set { _camera = value; stateChanges = true; } }
         public MatrixStack MatrixStack { get; private set; }
         public BasicEffect Effect { get; private set; }
         public Texture2D Black { get; private set; }
@@ -28,7 +28,7 @@ namespace Gem.Render
             this.GraphicsDevice = device;
             //Effect = new AlphaTestEffect(device);
             Effect = new BasicEffect(device);
-            Camera = new Cameras.Orthographic(device.Viewport);
+            Camera = new Cameras.OrthographicCamera(device.Viewport);
             MatrixStack = new MatrixStack();
 
             Black = new Texture2D(device, 1, 1, false, SurfaceFormat.Color);
@@ -124,10 +124,10 @@ namespace Gem.Render
         {
             if (stateChanges) Apply();
 
-            VertexBuffer[0].Position = new Vector3(x, y, depth);
-            VertexBuffer[1].Position = new Vector3(x + w, y, depth);
-            VertexBuffer[2].Position = new Vector3(x, y + h, depth);
-            VertexBuffer[3].Position = new Vector3(x + w, y + h, depth);
+            VertexBuffer[0].Position = new Vector3(x - 0.5f, y - 0.5f, depth);
+            VertexBuffer[1].Position = new Vector3(x + w - 0.5f, y - 0.5f, depth);
+            VertexBuffer[2].Position = new Vector3(x - 0.5f, y + h - 0.5f, depth);
+            VertexBuffer[3].Position = new Vector3(x + w - 0.5f, y + h - 0.5f, depth);
             VertexBuffer[0].TextureCoordinate = new Vector2(tx, ty);
             VertexBuffer[1].TextureCoordinate = new Vector2(tx + tw, ty);
             VertexBuffer[2].TextureCoordinate = new Vector2(tx, ty + th);

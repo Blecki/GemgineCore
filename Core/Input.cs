@@ -116,7 +116,7 @@ namespace Gem
         internal GamePadState previousPadState;
         internal GamePadState currentPadState;
 
-        private ComponentMapping<String, InputBinding> bindings = new ComponentMapping<string, InputBinding>();
+        private Common.MultiDictionary<String, InputBinding> bindings = new Common.MultiDictionary<string, InputBinding>();
         private Dictionary<String, AxisBinding> axisBindings = new Dictionary<string, AxisBinding>();
 
         internal XnaTextInput.TextInputHandler textHook;
@@ -165,7 +165,7 @@ namespace Gem
 
         public void ClearBindings()
         {
-            bindings = new ComponentMapping<string, InputBinding>();
+            bindings = new Common.MultiDictionary<string, InputBinding>();
             axisBindings.Clear();
         }
     }

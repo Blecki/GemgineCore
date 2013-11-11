@@ -62,7 +62,7 @@ namespace Gem.Render
             }
         }
 
-        public void Draw(CompiledModel model)
+        public void Draw(Geo.CompiledModel model)
         {
             device.SetVertexBuffer(model.verticies);
             device.Indices = model.indicies;
@@ -70,7 +70,7 @@ namespace Gem.Render
                 0, System.Math.Min(model.primitiveCount, 65535));
         }
 
-        public void Draw(Mesh mesh)
+        public void Draw(Geo.Mesh mesh)
         {
             if (mesh.verticies.Length > 0)
             {
@@ -79,7 +79,7 @@ namespace Gem.Render
             }
         }
 
-        public void DrawSprite(Mesh mesh)
+        public void DrawSprite(Geo.Mesh mesh)
         {
             if (mesh.verticies.Length > 0)
             {
@@ -89,7 +89,7 @@ namespace Gem.Render
             }
         }
 
-        public void DrawLines(Mesh mesh)
+        public void DrawLines(Geo.Mesh mesh)
         {
             if (mesh.lineIndicies != null && mesh.verticies.Length > 0)
                 device.DrawUserIndexedPrimitives(PrimitiveType.LineList, mesh.verticies, 0, mesh.verticies.Length,
