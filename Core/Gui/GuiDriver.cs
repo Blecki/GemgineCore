@@ -28,7 +28,7 @@ namespace Gem.Gui
                 "text-color", new Vector3(1, 1, 1),
                 "fg-color", new Vector3(1, 1, 1),
                 "hidden-container", null,
-                "font", new BitmapFont(Content.Load<Texture2D>("Content/small-font"), 16, 16, 10)
+                "font", new BitmapFont(Content.Load<Texture2D>("Content/small-font"), 6, 8, 6)
                 );
         }
 

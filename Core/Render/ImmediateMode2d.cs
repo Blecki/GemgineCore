@@ -124,10 +124,10 @@ namespace Gem.Render
         {
             if (stateChanges) Apply();
 
-            VertexBuffer[0].Position = new Vector3(x, y, depth);
-            VertexBuffer[1].Position = new Vector3(x + w, y, depth);
-            VertexBuffer[2].Position = new Vector3(x, y + h, depth);
-            VertexBuffer[3].Position = new Vector3(x + w, y + h, depth);
+            VertexBuffer[0].Position = new Vector3(x - 0.5f, y - 0.5f, depth);
+            VertexBuffer[1].Position = new Vector3(x + w - 0.5f, y - 0.5f, depth);
+            VertexBuffer[2].Position = new Vector3(x - 0.5f, y + h - 0.5f, depth);
+            VertexBuffer[3].Position = new Vector3(x + w - 0.5f, y + h - 0.5f, depth);
             VertexBuffer[0].TextureCoordinate = new Vector2(tx, ty);
             VertexBuffer[1].TextureCoordinate = new Vector2(tx + tw, ty);
             VertexBuffer[2].TextureCoordinate = new Vector2(tx, ty + th);

@@ -71,8 +71,8 @@ namespace Gem.Gui
                     float fy = (code / col) * font.glyphHeight;
 
                     context.Glyph(x, y, font.glyphWidth, font.glyphHeight, fx / font.fontData.Width,
-                        fy / font.fontData.Height, font.glyphWidth / font.fontData.Width,
-                        font.glyphHeight / font.fontData.Height, depth);
+                        fy / font.fontData.Height, (float)font.glyphWidth / (float)font.fontData.Width,
+                        (float)font.glyphHeight / (float)font.fontData.Height, depth);
 
                     x += font.kerningWidth;
                 }
