@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace Gem.Console
 {
+    /// <summary>
+    /// Manages the contents of a dynamic console and populates a text display.
+    /// </summary>
     public class DynamicConsoleBuffer
     {
         private String output;
@@ -29,16 +32,18 @@ namespace Gem.Console
         public int outputScrollPoint { get; set; } //Expressed in lines-from-end
         private int scrollbackSize;
         public int maxInputLines { get; set; }
-        TextDisplay display;
+        ConsoleDisplay display;
+
         public String title = null;
+        public String info = null;
         
-        public DynamicConsoleBuffer(int scrollbackSize, TextDisplay display)
+        public DynamicConsoleBuffer(int scrollbackSize, ConsoleDisplay display)
         {
             this.scrollbackSize = scrollbackSize;
             Reset(display);
         }
 
-        public void Reset(TextDisplay display)
+        public void Reset(ConsoleDisplay display)
         {
             output = "";
             outputScrollPoint = 0;
@@ -91,26 +96,33 @@ namespace Gem.Console
 
             var i = 0;
             var x = 0;
-            if (title != null)
+            if (!String.IsNullOrEmpty(title))
             {
-                for (; i < title.Length && i < display.width; ++i)
+                for (; i < title.Length && i < display.width; ++i) //Copy the title to the display
                     display.SetChar(i, title[i], Color.Orange, Color.Black);
-                for (; i < display.width; ++i)
+                for (; i < display.width; ++i) //Fill the rest of the title line with spaces
                     display.SetChar(i, ' ', Color.Orange, Color.Black);
             }
             for (; x < display.width * visibleOutputLines  && (x + outputStart) < output.Length; ++x, ++i)
-                display.SetChar(i, output[x + outputStart], Color.White, Color.Black);
-            for (; x < display.width * visibleOutputLines; ++x, ++i)
+                display.SetChar(i, output[x + outputStart], Color.White, Color.Black); //Copy output to display
+            for (; x < display.width * visibleOutputLines; ++x, ++i) //Fill rest of output area with spaces
                 display.SetChar(i, ' ', Color.White, Color.Black);
 
 
             if (title != null) visibleOutputLines += 1;
+
+            // Draw the info line. Output buffer info on the left, input buffer on the right, info line centered.
             var infoLine = i;
-            for (; i < display.width * (visibleOutputLines + 1); ++i)
+            for (; i < display.width * (visibleOutputLines + 1); ++i) //Clear the info line
                 display.SetChar(i, ' ', Color.Orange, Color.Black);
             rawWrite(infoLine, String.Format("OH:{0,2}", outputScrollPoint), Color.Orange, Color.Black);
             var iLine = String.Format("^I:{0,2}, VI:{1,2}", activeInput.scroll, totalInputLines - maxInputLines - activeInput.scroll);
             rawWrite(infoLine + display.width - iLine.Length, iLine, Color.Orange, Color.Black);
+            if (!String.IsNullOrEmpty(info))
+            {
+                if (info.Length > display.width * 0.75) info = info.Substring(0, (int)(display.width * 0.75));
+                rawWrite(infoLine + ((display.width - info.Length) / 2), info, Color.Orange, Color.Black);
+            }
 
             var inputStart = i;
             var inputc = activeInput.scroll * display.width;

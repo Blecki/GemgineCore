@@ -108,10 +108,10 @@
     <Compile Include="Common\Grid.cs" />
     <Compile Include="Geo\CompiledModel.cs" />
     <Compile Include="Console\DynamicConsoleBuffer.cs" />
-    <Compile Include="Console\TextDisplay.cs" />
-    <Compile Include="Console\Vertex.cs" />
-    <Compile Include="Console\VirtualConsole.cs" />
-    <Compile Include="Console\Window.cs" />
+    <Compile Include="Console\ConsoleDisplay.cs" />
+    <Compile Include="Console\ConsoleVertex.cs" />
+    <Compile Include="Console\ConsoleInputHandler.cs" />
+    <Compile Include="Console\ConsoleWindow.cs" />
     <Compile Include="EmptyGame.cs" />
     <Compile Include="Common\Euler.cs" />
     <Compile Include="Geo\Csg\Bevel.cs" />

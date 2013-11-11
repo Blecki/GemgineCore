@@ -11,44 +11,34 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Gem.Console
 {
-    public class TextDisplay
+    /// <summary>
+    /// Renders a grid of characters.
+    /// </summary>
+    public class ConsoleDisplay
     {
         private class Line
         {
             internal VertexBuffer buffer;
             internal bool dirty = true;
-            internal Vertex[] verts;
+            internal ConsoleVertex[] verts;
         }
         
         Line[] lines;
         IndexBuffer indexBuffer;
-        Texture2D font;
+        
         Effect effect;
-        float cursorTime = 0.0f;
-        internal int cursorPosition = 0;
-
-        float fontXScale = 1.0f / 16.0f;
-        float fontYScale = 1.0f / 16.0f;
 
         public int width { get; private set; }
         public int height { get; private set; }
+        public Gem.Gui.BitmapFont Font;
 
-        int topRow = 0;
-        public int TopRow { get { return topRow; } set { topRow = value % height; } }
-
-        float cellWidth;
-        float cellHeight;
-
-        public TextDisplay(int width, int height, GraphicsDevice device, ContentManager content)
+        public ConsoleDisplay(int width, int height, Gui.BitmapFont font, GraphicsDevice device, ContentManager content)
         {
             this.width = width;
             this.height = height;
 
-            cellWidth = 1.0f / width;
-            cellHeight = 1.0f / height;
-
-            font = content.Load<Texture2D>("small-font");
-            effect = content.Load<Effect>("draw_console");
+            this.Font = font;
+            effect = content.Load<Effect>("Content/draw-console");
 
             lines = new Line[height];
             var indicies = new short[width * 6];
@@ -68,13 +58,13 @@ namespace Gem.Console
             for (int y = 0; y < height; ++y)
             {
                 lines[y] = new Line();
-                lines[y].verts = new Vertex[width * 4];
+                lines[y].verts = new ConsoleVertex[width * 4];
                 for (int i = 0; i < width; ++i)
                 {
-                    lines[y].verts[i * 4 + 0].Position = new Vector3(i * cellWidth, y * cellHeight, 0);
-                    lines[y].verts[i * 4 + 1].Position = new Vector3((i + 1) * cellWidth, y * cellHeight, 0);
-                    lines[y].verts[i * 4 + 2].Position = new Vector3((i + 1) * cellWidth, (y + 1) * cellHeight, 0);
-                    lines[y].verts[i * 4 + 3].Position = new Vector3(i * cellWidth, (y + 1) * cellHeight, 0);
+                    lines[y].verts[i * 4 + 0].Position = new Vector3(i * font.glyphWidth - 0.5f, y * font.glyphHeight - 0.5f, 0);
+                    lines[y].verts[i * 4 + 1].Position = new Vector3((i + 1) * font.glyphWidth - 0.5f, y * font.glyphHeight - 0.5f, 0);
+                    lines[y].verts[i * 4 + 2].Position = new Vector3((i + 1) * font.glyphWidth - 0.5f, (y + 1) * font.glyphHeight - 0.5f, 0);
+                    lines[y].verts[i * 4 + 3].Position = new Vector3(i * font.glyphWidth - 0.5f, (y + 1) * font.glyphHeight - 0.5f, 0);
 
                     lines[y].verts[i * 4 + 0].FGColor = Color.White.ToVector4();
                     lines[y].verts[i * 4 + 1].FGColor = Color.White.ToVector4();
@@ -85,27 +75,26 @@ namespace Gem.Console
                     lines[y].verts[i * 4 + 2].BGColor = Color.Black.ToVector4();
                     lines[y].verts[i * 4 + 3].BGColor = Color.Black.ToVector4();
                 }
-                lines[y].buffer = new VertexBuffer(device, typeof(Vertex), lines[y].verts.Length, BufferUsage.None);
+                lines[y].buffer = new VertexBuffer(device, typeof(ConsoleVertex), lines[y].verts.Length, BufferUsage.None);
             }
         }
 
         public void SetChar(int place, int character, Color? fg = null, Color? bg = null)
         {
-            //character -= ' ';
-            var charX = character % 16;
-            var charY = character / 16;
-
-            place += topRow * width;
-            if (place >= width * height) place -= width * height;
+            var charX = character % Font.Columns;
+            var charY = character / Font.Columns;
 
             var row = place / width;
             place %= width;
 
-            var Kerning = fontXScale / 6.0f;
-            lines[row].verts[place * 4 + 0].TextureCoordinate = new Vector2((charX * fontXScale) + Kerning, charY * fontYScale);
-            lines[row].verts[place * 4 + 1].TextureCoordinate = new Vector2((charX + 1) * fontXScale - Kerning , charY * fontYScale);
-            lines[row].verts[place * 4 + 2].TextureCoordinate = new Vector2((charX + 1) * fontXScale - Kerning, (charY + 1) * fontYScale);
-            lines[row].verts[place * 4 + 3].TextureCoordinate = new Vector2((charX * fontXScale) + Kerning, (charY + 1) * fontYScale);
+            lines[row].verts[place * 4 + 0].TextureCoordinate =
+                new Vector2((float)(charX * Font.fgWidth), (float)(charY * Font.fgHeight));
+            lines[row].verts[place * 4 + 1].TextureCoordinate =
+                new Vector2((float)((charX + 1) * Font.fgWidth), (float)(charY * Font.fgHeight));
+            lines[row].verts[place * 4 + 2].TextureCoordinate =
+                new Vector2((float)((charX + 1) * Font.fgWidth), (float)((charY + 1) * Font.fgHeight));
+            lines[row].verts[place * 4 + 3].TextureCoordinate =
+                new Vector2((float)(charX * Font.fgWidth), (float)((charY + 1) * Font.fgHeight));
 
             if (fg != null)
             {
@@ -144,8 +133,9 @@ namespace Gem.Console
 
         public void Draw(GraphicsDevice device)
         {
-            effect.Parameters["Texture"].SetValue(font);
-            effect.Parameters["Projection"].SetValue(Matrix.CreateOrthographicOffCenter(0, 1, 1, 0, -1, 1));
+            effect.Parameters["Texture"].SetValue(Font.fontData);
+            effect.Parameters["Projection"].SetValue(Matrix.CreateOrthographicOffCenter(0, width * Font.glyphWidth, 
+                height * Font.glyphHeight, 0, -1, 1));
             effect.Parameters["View"].SetValue(Matrix.Identity);
             effect.CurrentTechnique = effect.Techniques[0];
 
@@ -154,21 +144,9 @@ namespace Gem.Console
 
             device.Indices = indexBuffer;
 
-            if (topRow == 0)
-            {
-                effect.Parameters["World"].SetValue(Matrix.Identity);
-                effect.CurrentTechnique.Passes[0].Apply();
-                drawRows(0, height, device);
-            }
-            else
-            {
-                effect.Parameters["World"].SetValue(Matrix.CreateTranslation(new Vector3(0, -cellHeight * topRow, 0)));
-                effect.CurrentTechnique.Passes[0].Apply();
-                drawRows(topRow, height, device);
-                effect.Parameters["World"].SetValue(Matrix.CreateTranslation(new Vector3(0, cellHeight * (height - topRow), 0)));
-                effect.CurrentTechnique.Passes[0].Apply();
-                drawRows(0, topRow, device);
-            }
+            effect.Parameters["World"].SetValue(Matrix.Identity);
+            effect.CurrentTechnique.Passes[0].Apply();
+            drawRows(0, height, device);
 
             device.SetVertexBuffer(null);
         }

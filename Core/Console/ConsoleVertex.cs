@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Gem.Console
 {
-    public struct Vertex : IVertexType
+    public struct ConsoleVertex : IVertexType
     {
         public Vector3 Position;
         public Vector2 TextureCoordinate;
