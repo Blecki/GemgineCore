@@ -105,6 +105,7 @@ namespace Gem.Gui
                     {
                         context.Color = (GetSetting("text-color", Vector3.Zero) as Vector3?).Value;
                         BitmapFont.RenderText(label.ToString(), rect.X, rect.Y, rect.Width + rect.X,
+                            (GetSetting("font-scale", 1.0f) as float?).Value,
                             context, font as BitmapFont);
                     }
                 }

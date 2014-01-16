@@ -37,8 +37,9 @@ namespace Gem.Gui
         }
 
         public static void RenderText(
-            String text, float X, float Y, float wrapAt, Render.ImmediateMode2d context, BitmapFont font, float depth = 0)
+            String text, float X, float Y, float wrapAt, float scale, Render.ImmediateMode2d context, BitmapFont font, float depth = 0)
         {
+            //wrapAt /= scale;
             context.Texture = font.fontData;
 
             var x = X;
@@ -51,7 +52,7 @@ namespace Gem.Gui
             {
                 if (x >= wrapAt)
                 {
-                    y += font.glyphHeight;
+                    y += font.glyphHeight * scale;
                     x = X;
                 }
 
@@ -59,22 +60,23 @@ namespace Gem.Gui
                 if (code == '\n')
                 {
                     x = X;
-                    y += font.glyphHeight;
+                    y += font.glyphHeight * scale;
                 }
                 else if (code == ' ')
                 {
-                    x += font.kerningWidth;
+                    x += font.kerningWidth * scale;
                 }
                 else if (code < 0x80)
                 {
                     float fx = (code % col) * font.glyphWidth;
                     float fy = (code / col) * font.glyphHeight;
 
-                    context.Glyph(x, y, font.glyphWidth, font.glyphHeight, fx / font.fontData.Width,
+                    context.Glyph(x, y, font.glyphWidth * scale, font.glyphHeight * scale, 
+                        fx / font.fontData.Width,
                         fy / font.fontData.Height, (float)font.glyphWidth / (float)font.fontData.Width,
                         (float)font.glyphHeight / (float)font.fontData.Height, depth);
 
-                    x += font.kerningWidth;
+                    x += font.kerningWidth * scale;
                 }
             }
 

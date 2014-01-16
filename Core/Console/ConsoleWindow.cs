@@ -116,7 +116,7 @@ namespace Gem.Console
                     if (Condition())
                     {
                         HandlerMutex.WaitOne();
-                        InputHandler.KeyDown(args.KeyCode, args.KeyValue);
+                        this.InputHandler.KeyDown(args.KeyCode, args.KeyValue);
                         HandlerMutex.ReleaseMutex();
                     }
                 };
@@ -124,7 +124,7 @@ namespace Gem.Console
             Input.textHook.KeyUp += (hook, args) =>
                 {
                     HandlerMutex.WaitOne();
-                    InputHandler.KeyUp(args.KeyCode, args.KeyValue);
+                    this.InputHandler.KeyUp(args.KeyCode, args.KeyValue);
                     HandlerMutex.ReleaseMutex();
                 };
 
@@ -133,7 +133,7 @@ namespace Gem.Console
                     if (Condition())
                     {
                         HandlerMutex.WaitOne();
-                        InputHandler.KeyPress(args.KeyChar);
+                        this.InputHandler.KeyPress(args.KeyChar);
                         HandlerMutex.ReleaseMutex();
                     }
                 };
