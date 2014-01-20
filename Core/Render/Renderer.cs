@@ -114,10 +114,12 @@ namespace Gem.Render
 
         public void Draw(IEnumerable<IRenderable> renderables, DrawModeFlag modeFlag = DrawModeFlag.Normal)
         {
+			device.RasterizerState = RasterizerState.CullCounterClockwise;
             device.SetRenderTarget(null);
             device.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
             device.BlendState = BlendState.AlphaBlend;
             device.DepthStencilState = DepthStencilState.Default;
+			device.SamplerStates[0] = SamplerState.PointClamp;
 
             drawEffect.View = Camera.View;
             drawEffect.Projection = Camera.Projection;

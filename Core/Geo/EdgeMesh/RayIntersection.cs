@@ -24,7 +24,7 @@ namespace Gem.Geo
 
             if (System.Math.Abs((System.Math.PI * 2) - accumulatedAngle) < 0.01) return true;
             return false;
-            return Gem.Math.Utility.NearlyEqual(accumulatedAngle, Gem.Math.Angle.PI2);
+            //return Gem.Math.Utility.NearlyEqual(accumulatedAngle, Gem.Math.Angle.PI2);
         }
 
         private Plane ConstructPlane(EMFace face)

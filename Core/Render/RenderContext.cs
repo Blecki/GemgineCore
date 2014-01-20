@@ -16,6 +16,8 @@ namespace Gem.Render
         public ICamera Camera;
 
         public Texture2D White { get; private set; }
+		private VertexPositionNormalTexture[] VertexBuffer = new VertexPositionNormalTexture[8];
+
 
         public void BeginScene(BasicEffect effect, AlphaTestEffect spriteEffect, GraphicsDevice device)
         {
@@ -78,6 +80,37 @@ namespace Gem.Render
                     mesh.indicies, 0, mesh.indicies.Length / 3);
             }
         }
+
+		public void DrawLine(Vector3 v0, Vector3 v1, float width, Vector3 n)
+		{
+			var tangent = v1 - v0;
+			tangent.Normalize();
+			var offset = Vector3.Transform(tangent, Matrix.CreateFromAxisAngle(n, (float)(System.Math.PI / 2)));
+			offset.Normalize();
+			offset *= width / 2;
+
+			VertexBuffer[0].Position = v0 + offset;
+			VertexBuffer[1].Position = v1 + offset;
+			VertexBuffer[2].Position = v0 - offset;
+			VertexBuffer[3].Position = v1 + offset;
+			VertexBuffer[4].Position = v1 - offset;
+			VertexBuffer[5].Position = v0 - offset;
+
+			for (int i = 0; i < 6; ++i) VertexBuffer[i].Normal = n;
+
+			device.DrawUserPrimitives(PrimitiveType.TriangleList, VertexBuffer, 0, 2);
+		}
+
+		public void DrawPoint()
+		{
+			VertexBuffer[0].Position = new Vector3(-0.5f, -0.5f, 0);
+			VertexBuffer[1].Position = new Vector3(-0.5f, 0.5f, 0);
+			VertexBuffer[2].Position = new Vector3(0.5f, -0.5f, 0);
+			VertexBuffer[3].Position = new Vector3(0.5f, 0.5f, 0);
+			for (int i = 0; i < 6; ++i) VertexBuffer[i].Normal = Vector3.UnitZ;
+
+			device.DrawUserPrimitives(PrimitiveType.TriangleStrip, VertexBuffer, 0, 2);
+		}
 
         public void DrawSprite(Geo.Mesh mesh)
         {

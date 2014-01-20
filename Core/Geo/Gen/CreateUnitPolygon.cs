@@ -53,7 +53,7 @@ namespace Gem.Geo
                 result.verticies[i].Normal = Vector3.UnitZ;
             }
 
-            result.indicies = new short[] { 0, 1, 2, 3, 0, 2 };
+            result.indicies = new short[] { 0, 2, 1, 3, 2, 0 };
             return result;
         }
     }

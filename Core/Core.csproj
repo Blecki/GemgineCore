@@ -121,6 +121,7 @@
     <Compile Include="Geo\Csg\CreatePyramid.cs" />
     <Compile Include="Geo\Csg\PlanesFromMesh.cs" />
     <Compile Include="Geo\Csg\Transform.cs" />
+    <Compile Include="Geo\EdgeMesh\TangentTrace.cs" />
     <Compile Include="Geo\EdgeMesh\RayIntersection.cs" />
     <Compile Include="Geo\Gen\AlignToSpline.cs" />
     <Compile Include="Geo\Gen\Basics.cs" />
