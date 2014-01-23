@@ -13,9 +13,9 @@ namespace Gem
 {
     public class Main : Microsoft.Xna.Framework.Game
     {
-        private IGame activeGame = null;
-        private IGame nextGame = null;
-        public IGame Game { get { return activeGame; } set { nextGame = value; } }
+        private IScreen activeGame = null;
+        private IScreen nextGame = null;
+        public IScreen Game { get { return activeGame; } set { nextGame = value; } }
 
         public List<Console.ConsoleWindow> Consoles = new List<Console.ConsoleWindow>();
 

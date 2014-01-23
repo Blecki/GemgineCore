@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Gem
 {
-    public interface IGame
+    public interface IScreen
     {
         Input Input { get; set; }
         Main Main { get; set; }

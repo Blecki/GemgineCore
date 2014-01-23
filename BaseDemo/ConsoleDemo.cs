@@ -9,7 +9,7 @@ using Gem;
 
 namespace BaseDemo
 {
-    public class ConsoleDemo : IGame
+    public class ConsoleDemo : IScreen
     {
         public Input Input { get; set; }
         public Main Main { get; set; }

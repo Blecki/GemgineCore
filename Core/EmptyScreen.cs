@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Gem
 {
-    public class EmptyGame : IGame
+    public class EmptyScreen : IScreen
     {
         public Input Input { get; set; }
         public Main Main { get; set; }
 
-        public EmptyGame()
+        public EmptyScreen()
         {
         }
 
