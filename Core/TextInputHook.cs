@@ -117,7 +117,8 @@ namespace XnaTextInput
         public static extern int GetCurrentThreadId();
 
         /// <summary>Handle for the created hook.</summary>
-        private readonly IntPtr HookHandle;
+        private IntPtr HookHandle;
+		private IntPtr Hwnd;
 
         private readonly GetMsgProc ProcessMessagesCallback;
 
@@ -125,11 +126,25 @@ namespace XnaTextInput
         /// <param name="whnd">Handle of the window you wish to receive messages (and thus keyboard input) from.</param>
         public TextInputHandler(IntPtr whnd)
         {
+			this.Hwnd = whnd;
             // Create the delegate callback:
             this.ProcessMessagesCallback = new GetMsgProc(ProcessMessages);
             // Create the keyboard hook:
             this.HookHandle = SetWindowsHookEx(HookId.WH_GETMESSAGE, this.ProcessMessagesCallback, IntPtr.Zero, GetCurrentThreadId());
         }
+
+		public void Unhook()
+		{
+			if (this.HookHandle != IntPtr.Zero) UnhookWindowsHookEx(this.HookHandle);
+			this.HookHandle = IntPtr.Zero;
+		}
+
+		public void Rehook()
+		{
+			Unhook();
+			this.HookHandle = SetWindowsHookEx(
+				HookId.WH_GETMESSAGE, this.ProcessMessagesCallback, IntPtr.Zero, GetCurrentThreadId());
+		}
 
         public void Dispose()
         {

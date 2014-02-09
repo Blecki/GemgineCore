@@ -24,7 +24,7 @@ namespace Gem.Gui
             uiRenderer = new Render.ImmediateMode2d(device);
 
             defaultSettings = new PropertySet(
-                "bg-color", new Vector3(0, 1, 0),
+                "bg-color", new Vector3(0, 0, 0),
                 "text-color", new Vector3(1, 1, 1),
                 "fg-color", new Vector3(1, 1, 1),
                 "hidden-container", null,

@@ -91,7 +91,7 @@ namespace Gem.Gui
             module.DrawRoot(uiRoot, uiCamera, renderTarget);
         }
 
-        public void DrawEx(Render.RenderContext context)
+        public void DrawEx(Render.RenderContext context, Render.RenderMode mode)
         {
             DrawEx(context, Orientation.Transform);
         }
@@ -112,6 +112,8 @@ namespace Gem.Gui
             uiContext.BeginScene(null, false);
             uiRoot.Render(uiContext);
         }
+
+		public void SetHilite(bool hilited) { }
 
     }
 }

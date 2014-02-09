@@ -121,6 +121,16 @@ namespace Gem
 
         internal XnaTextInput.TextInputHandler textHook;
 
+		public void UnhookKeyboard()
+		{
+			textHook.Unhook();
+		}
+
+		public void RehookKeyboard()
+		{
+			textHook.Rehook();
+		}
+
         public Input(IntPtr WindowHandle)
         {
             textHook = new XnaTextInput.TextInputHandler(WindowHandle);

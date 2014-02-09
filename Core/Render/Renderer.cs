@@ -57,8 +57,11 @@ namespace Gem.Render
 
         public void PreDraw(float elapsedSeconds, IRenderable renderable)
         {
-            renderContext.Camera = Camera;
-            renderable.PreDraw(elapsedSeconds, device, renderContext);
+			if (renderable != null)
+			{
+				renderContext.Camera = Camera;
+				renderable.PreDraw(elapsedSeconds, device, renderContext);
+			}
         }
 
         public Ray GetMouseRay(Vector2 mouseCoordinates)
@@ -90,7 +93,7 @@ namespace Gem.Render
                 var idBytes = BitConverter.GetBytes(index);
                 drawIDEffect.DiffuseColor = new Vector3(idBytes[0] / 255.0f, idBytes[1] / 255.0f, idBytes[2] / 255.0f);
                 drawSpriteEffect.DiffuseColor = drawIDEffect.DiffuseColor;
-                renderable.DrawEx(renderContextID);
+                renderable.DrawEx(renderContextID, RenderMode.MousePick);
 
                 index += 1;
             }
@@ -115,7 +118,7 @@ namespace Gem.Render
         public void Draw(IEnumerable<IRenderable> renderables, DrawModeFlag modeFlag = DrawModeFlag.Normal)
         {
 			device.RasterizerState = RasterizerState.CullCounterClockwise;
-            device.SetRenderTarget(null);
+            //device.SetRenderTarget(null);
             device.Clear(ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
             device.BlendState = BlendState.AlphaBlend;
             device.DepthStencilState = DepthStencilState.Default;
@@ -133,7 +136,7 @@ namespace Gem.Render
 
             if (modeFlag == DrawModeFlag.Normal)
                 foreach (var node in renderables)
-                    node.DrawEx(renderContext);
+                    node.DrawEx(renderContext, RenderMode.Normal);
             
             debug.Begin(Matrix.Identity, Camera.View, Camera.Projection);
             foreach (var line in debugLines)

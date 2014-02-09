@@ -22,7 +22,7 @@ namespace Gem.Render.SceneGraph
             rootNode.UpdateWorldTransform(Matrix.Identity);   
         }
 
-        void IRenderable.DrawEx(RenderContext context)
+        void IRenderable.DrawEx(RenderContext context, RenderMode mode)
         {
             rootNode.Draw(context);
         }
@@ -31,5 +31,7 @@ namespace Gem.Render.SceneGraph
         {
             rootNode.CalculateLocalMouse(mouseRay, debug);
         }
+
+		public void SetHilite(bool hilited) { }
     }
 }

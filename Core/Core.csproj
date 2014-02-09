@@ -146,6 +146,7 @@
     <Compile Include="Geo\TextureProjection.cs" />
     <Compile Include="Gui\BitmapFont.cs" />
     <Compile Include="Gui\BorderLayout.cs" />
+    <Compile Include="Gui\VirtualLayout.cs" />
     <Compile Include="Gui\GuiDriver.cs" />
     <Compile Include="Gui\GuiRenderable.cs" />
     <Compile Include="Gui\FlowLayout.cs" />

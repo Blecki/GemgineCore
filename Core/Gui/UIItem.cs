@@ -92,22 +92,38 @@ namespace Gem.Gui
             {
                 if (GetSetting("hidden-container", null) == null)
                 {
-                    if (GetSetting("transparent", null) == null)
-                    {
-                        context.Texture = context.White;
-                        context.Color = (GetSetting("bg-color", Vector3.One) as Vector3?).Value;
-                        context.Quad(rect);
-                    }
+					bool ContinueDrawing = true;
+					var customDraw = GetSetting("draw", null);
+					if (customDraw is Func<UIItem, Render.ImmediateMode2d, bool>)
+						ContinueDrawing = (customDraw as Func<UIItem, Render.ImmediateMode2d, bool>)(this, context);
 
-                    var label = GetSetting("label", null);
-                    var font = GetSetting("font", null);
-                    if (label != null && font != null)
-                    {
-                        context.Color = (GetSetting("text-color", Vector3.Zero) as Vector3?).Value;
-                        BitmapFont.RenderText(label.ToString(), rect.X, rect.Y, rect.Width + rect.X,
-                            (GetSetting("font-scale", 1.0f) as float?).Value,
-                            context, font as BitmapFont);
-                    }
+					if (ContinueDrawing)
+					{
+						if (GetSetting("transparent", null) == null)
+						{
+							context.Texture = context.White;
+							context.Color = (GetSetting("bg-color", Vector3.One) as Vector3?).Value;
+							context.Quad(rect);
+
+							var bgImage = GetSetting("bg-image", null);
+							if (bgImage != null && bgImage is Microsoft.Xna.Framework.Graphics.Texture2D)
+							{
+								context.Color = (GetSetting("fg-color", Vector3.One) as Vector3?).Value;
+								context.Texture = bgImage as Microsoft.Xna.Framework.Graphics.Texture2D;
+								context.Glyph(rect.X, rect.Y, rect.Width, rect.Height, 0, 0, 1, 1);
+							}
+						}
+
+						var label = GetSetting("label", null);
+						var font = GetSetting("font", null);
+						if (label != null && font != null)
+						{
+							context.Color = (GetSetting("text-color", Vector3.Zero) as Vector3?).Value;
+							BitmapFont.RenderText(label.ToString(), rect.X, rect.Y, rect.Width + rect.X,
+								(GetSetting("font-scale", 1.0f) as float?).Value,
+								context, font as BitmapFont);
+						}
+					}
                 }
 
                 foreach (var child in children)
